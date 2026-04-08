@@ -4,7 +4,7 @@ import tempfile
 
 def get_zipped_files(to_extract_f:list,extracted_dir:dir,extracted:list) -> None:
     """
-    This function receives a list of zip archives, a temp dir and a list of extracted files
+    This function receives a list of zip archives, a temp dir and a list of extracted files,
     extracts the content of each zip file and deletes it after being extracted
  
     Returns a list of the extracted files
@@ -14,9 +14,14 @@ def get_zipped_files(to_extract_f:list,extracted_dir:dir,extracted:list) -> None
     path_extracted_dir = Path(extracted_dir.name)
     for zip_f in to_extract_f:
         with zipfile.ZipFile(zip_f,'r') as to_extract_zips:
-            to_extract_zips.extractall(path=path_extracted_dir)
+            for file in to_extract_zips.infolist():
+                target_path = path_extracted_dir / file.filename
+                if target_path.exists():
+                    print(f"Skipping {file.filename}: File already exists")
+                else:
+                    to_extract_zips.extract(file,path_extracted_dir)
+                    print(f"Extracted: {file.filename}")
         to_delete = Path(zip_f)
         to_delete.unlink(missing_ok=True) # deletes the zip folder that was just extracted
-        to_extract_f.remove(zip_f) #removes it from the 'to_extract' list
     
-    extracted.extend(path_extracted_dir.rglob('*'))
+    extracted.extend([file for file in path_extracted_dir.rglob('*') if file.is_file()])

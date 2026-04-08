@@ -55,38 +55,6 @@ extension_map = {
 
 #file=Path(r'd:/file.jpg').stat().st_size -> get the size of a file
 
-def move_file(filePath:Path,to_compress=False) -> None:
-    """
-    This is an auxiliar function for the process of moving files to the console directory
-
-    It will receive a Path object of a file and move that file to the designated directory
-    """
-    suffix = filePath.suffix
-    if suffix not in extension_map:
-        dest = Path() / 'unknown'
-        shutil.move(filePath,dest)
-        return None
-    else:
-        possible_consoles = extension_map[suffix]
-        if to_compress == False:
-            if len(possible_consoles) == 1:
-                dest = Path() / 'ROMs' / possible_consoles[0]
-                shutil.move(filePath,dest)
-            elif len(possible_consoles) > 1:
-                dest = Path()/ "ambiguous"
-                shutil.move(filePath,dest)
-        else: #if the to_compress is True
-            if len(possible_consoles) == 1:
-                dest = Path() / 'to_compress' / f"to_compress_{possible_consoles[0]}"
-                shutil.move(filePath,dest)
-            elif len(possible_consoles) > 1: 
-                dest = Path()/ "ambiguous_to_compress"
-                shutil.move(filePath,dest)
-
-
-
-
-
 def create_folders() -> None:
     """
     This function will create the ROMs folder and the to_compress folder by looking at the console dict in order to see which consoles
@@ -120,6 +88,67 @@ def create_folders() -> None:
             dest = Path() / "to_compress" / f"to_compress_{dir_flag[0]}"
             dest.mkdir(exist_ok=True)
 
+def move_file(filePath:Path,to_compress=False) -> None:
+    """
+    This is an auxiliar function for the process of moving files to the console directory
+
+    It will receive a Path object of a file and move that file to the designated directory
+    """
+    suffix = filePath.suffix
+    if suffix not in extension_map:
+        dest = Path() / 'unknown'
+        shutil.move(filePath,dest)
+        return None
+    else:
+        possible_consoles = extension_map[suffix]
+        if to_compress == False:
+            if len(possible_consoles) == 1:
+                dest = Path() / 'ROMs' / possible_consoles[0]
+                shutil.move(filePath,dest)
+            elif len(possible_consoles) > 1:
+                dest = Path()/ "ambiguous"
+                shutil.move(filePath,dest)
+        else: #if the to_compress is True
+            if len(possible_consoles) == 1:
+                dest = Path() / 'to_compress' / f"to_compress_{possible_consoles[0]}"
+                shutil.move(filePath,dest)
+            elif len(possible_consoles) > 1: 
+                dest = Path()/ "ambiguous_to_compress"
+                shutil.move(filePath,dest)
+
+
+
+def resolve_ambiguous_size(file):
+    return None
+
+
+
+def resolve_console(file:Path):
+    """Needs doc"""
+    suffix = file.suffix
+    if suffix not in extension_map:
+        return 'unknown'
+    elif len(extension_map[suffix]) == 1:
+        return extension_map[suffix][0]
+    elif len(extension_map[suffix]) > 1:
+        return 'ambiguous'
+
+def get_destination(console,to_compress = False):
+    """Needs doc"""
+    if console == 'unknown':
+        return Path() / console
+    
+    if to_compress == False:
+        if console == 'ambiguous':
+            return Path() / console
+        else:
+            return Path() / 'ROMs' / console
+    else:
+        if console == 'ambiguous':
+            return Path() / f"{console}_to_compress"
+        else:
+            return Path() / 'to_compress' / f"to_compress_{console}"
+
 
 def processor(file_types: dict, tempDir: tempfile):
     """
@@ -134,15 +163,18 @@ def processor(file_types: dict, tempDir: tempfile):
     """
 
     create_folders()
-
+    
     for type, files in file_types.items():
-        if type == "not_to_compress":
-            for file in files:
-                move_file(file)
-        elif type == "to_compress":
-            for file in files:
-                move_file(file,to_compress=True)
-
+        for file in files:
+            console = resolve_console(file)
+            if type == 'to_compress':
+                dest = get_destination(console,to_compress=True)
+                shutil.move(file,dest)
+            elif type == 'not_to_compress':
+                dest = get_destination(console,to_compress=False)
+                shutil.move(file,dest)
+            else:
+                continue #In this part, I don't care about files that need to be extracted because there should be none
                 
     
 

@@ -36,6 +36,7 @@ classifier.classify_files(files,files_type_dict,valid_suffix_dict)
 while files_type_dict['to_extract']:
     copy_to_extract_files = files_type_dict['to_extract'].copy()
     files_type_dict['to_extract'].clear()
+    extracted_list.clear() #this is the list of files that were already extracted, it makes sense to clear it before in order to make sure we are not always dealing with the same files
     extractor.get_zipped_files(copy_to_extract_files,tempDir,extracted_list)
     classifier.classify_files(extracted_list,files_type_dict,valid_suffix_dict)
 
