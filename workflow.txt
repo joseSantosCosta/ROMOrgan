@@ -1,1 +1,0 @@
-Input ROMs → Scan → Classify → Rename → Organize → (Optional) Compress → Output
