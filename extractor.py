@@ -1,54 +1,22 @@
 import zipfile
 from pathlib import Path
-import shutil
-import logging
+import tempfile
 
-
-test_dir = Path("test_files")
-workflow_file = Path("workflow.txt")
-
-new_file = test_dir / "new_file.txt"
-
-#print(test_dir.exists())
-#print(workflow_file.exists())
-#print(workflow_file.exists())
-#print(new_file.exists())
-#print(test_dir.absolute())
-
-#p = Path("..").resolve() #in cases where we use shortcuts, if you want the real path use resolve, not absolute
-#print(p)
-#p = Path(__file__).resolve() #__file__ is the current file
-#print(p)
-#p = Path("~/dotfiles").expanduser() 
-#print(p)
-test_files = Path() / "test_files" #path.home returns the user directory
-#print(p)
-
-
-#create non compressed console folders
-#look to the files that were downloaded
-#check if there aren't any none relevant files
-#zip files must be extracted and deleted after extraction
-#each file goes to the corresponding console folder
-
-console_tocompress_dict = {
-    "GBA" : "tocompress_gba",
-    "PSP" : "tocompress_psp",
-    "PS1" : "tocompress_ps1",
-    "PS2" : "tocompress_ps2",
-    "WII" : "tocompress_wii",
-    "SNES": "tocompress_SNES"
-}
-
-create_to_compress = Path("to_compress")
-create_to_compress.mkdir(exist_ok=True)
-
-
-for console,dir in console_tocompress_dict.items():
-    to_compress = Path() / "to_compress" / console_tocompress_dict[console]
-    to_compress.mkdir(exist_ok=True)
-
-
-
-
-
+def get_zipped_files(to_extract_f:list,extracted_dir:dir,extracted:list) -> None:
+    """
+    This function receives a list of zip archives, a temp dir and a list of extracted files
+    extracts the content of each zip file and deletes it after being extracted
+ 
+    Returns a list of the extracted files
+    
+    The temporary directory must be kept alive until the processor finishes it job, it must not get deleted by the user
+    """
+    path_extracted_dir = Path(extracted_dir.name)
+    for zip_f in to_extract_f:
+        with zipfile.ZipFile(zip_f,'r') as to_extract_zips:
+            to_extract_zips.extractall(path=path_extracted_dir)
+        to_delete = Path(zip_f)
+        to_delete.unlink(missing_ok=True) # deletes the zip folder that was just extracted
+        to_extract_f.remove(zip_f) #removes it from the 'to_extract' list
+    
+    extracted.extend(path_extracted_dir.rglob('*'))
