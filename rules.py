@@ -35,4 +35,12 @@ def create_valid_suffix_dict(file) -> dict:
     
     return valid_suffix_dict
 
+def create_suffix_size_dict(file) -> dict:
+    suffix_size_file = csv.reader(file,delimiter='\t')
+    suffix_size_dict = {}
+
+    for row in suffix_size_file:
+        suffix_size_dict[(row[0],row[1])] = (row[2],row[3],row[4])
+    return suffix_size_dict
+
 #need to create a temporary file and its path

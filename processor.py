@@ -88,42 +88,14 @@ def create_folders() -> None:
             dest = Path() / "to_compress" / f"to_compress_{dir_flag[0]}"
             dest.mkdir(exist_ok=True)
 
-def move_file(filePath:Path,to_compress=False) -> None:
-    """
-    This is an auxiliar function for the process of moving files to the console directory
 
-    It will receive a Path object of a file and move that file to the designated directory
-    """
-    suffix = filePath.suffix
-    if suffix not in extension_map:
-        dest = Path() / 'unknown'
-        shutil.move(filePath,dest)
-        return None
-    else:
-        possible_consoles = extension_map[suffix]
-        if to_compress == False:
-            if len(possible_consoles) == 1:
-                dest = Path() / 'ROMs' / possible_consoles[0]
-                shutil.move(filePath,dest)
-            elif len(possible_consoles) > 1:
-                dest = Path()/ "ambiguous"
-                shutil.move(filePath,dest)
-        else: #if the to_compress is True
-            if len(possible_consoles) == 1:
-                dest = Path() / 'to_compress' / f"to_compress_{possible_consoles[0]}"
-                shutil.move(filePath,dest)
-            elif len(possible_consoles) > 1: 
-                dest = Path()/ "ambiguous_to_compress"
-                shutil.move(filePath,dest)
-
-
-
-def resolve_ambiguous_size(file):
+def resolve_ambiguous_size(file:Path,suffix_size:dict) -> Path:
+    
     return None
 
 
 
-def resolve_console(file:Path):
+def resolve_console(file:Path) -> str:
     """Needs doc"""
     suffix = file.suffix
     if suffix not in extension_map:

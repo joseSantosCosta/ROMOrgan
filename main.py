@@ -17,6 +17,8 @@ files_type_dict = rules.create_file_types_dict()
 
 valid_suffix_dict = rules.create_valid_suffix_dict('valid_suffix.txt')
 
+suffix_size_dict = rules.create_suffix_size_dict('suffix_sizes.txt')
+
 tempDir,extracted_list = rules.create_extracted_temp()
 
 #files = scan()
