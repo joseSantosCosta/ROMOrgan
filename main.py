@@ -45,7 +45,7 @@ while files_type_dict['to_extract']:
 
 #processor(classified)
 processor.create_folders() 
-processor.processor(files_type_dict,tempDir)
+processor.processor(files_type_dict,tempDir,suffix_size_dict)
 
 
     

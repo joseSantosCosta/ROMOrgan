@@ -1,0 +1,7 @@
+PS1	ps1,psx,playstation	slus-0,sles-0,scus-9,sces-0,slps-0,slps-1
+PS2	ps2,playstation2,playstation 2	slus-2,sles-5,scus-97,sces-5,slpm
+Saturn	saturn	mk-,t-,gs-,hdr-
+PSP	psp	ulus,ules,ucus,uces,npjh,npuh
+GC	gc,gamecube,gcn	dl-dol
+Wii	wii	rvl-
+GENESIS	genesis,megadrive,md	mk-,t-
