@@ -1,6 +1,7 @@
 from pathlib import Path
 import shutil
 import tempfile
+import csv
 
 #This module will receive a dictionary from the classifier.classify_files() function 
 
@@ -90,7 +91,6 @@ def create_folders() -> None:
 
 
 def resolve_ambiguous_size(file:Path,suffix_size:dict) -> Path:
-    
     return None
 
 

@@ -26,21 +26,22 @@ def create_valid_suffix_dict(file) -> dict:
 
     Returns the dictionary
     """
-
-    valid_suffix_file = csv.reader(file,delimiter='\t')
     valid_suffix_dict = {}
-
-    for row in valid_suffix_file:
-        valid_suffix_dict[row[0]] = (row[1],row[2])
+    with open(file,'r') as f:
+        valid_suffix_file = csv.reader(f,delimiter='\t')
+        for row in valid_suffix_file:
+            valid_suffix_dict[row[0]] = (row[1],row[2])
     
     return valid_suffix_dict
 
 def create_suffix_size_dict(file) -> dict:
-    suffix_size_file = csv.reader(file,delimiter='\t')
     suffix_size_dict = {}
-
-    for row in suffix_size_file:
-        suffix_size_dict[(row[0],row[1])] = (row[2],row[3],row[4])
+    with open(file,'r') as f:
+        suffix_size_file = csv.reader(f,delimiter='\t')
+        for row in suffix_size_file:
+            suffix_size_dict[(row[0],row[1])] = (row[2], row[3],row[4])
     return suffix_size_dict
+
+
 
 #need to create a temporary file and its path

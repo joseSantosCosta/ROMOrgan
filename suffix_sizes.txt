@@ -1,4 +1,3 @@
-ext	console	min_size_mb	max_size_mb	media
 .iso	PS1	0	700	CD
 .iso	GC	1400	1434	MiniDVD
 .iso	PSP	0	1844	UMD
