@@ -19,6 +19,8 @@ valid_suffix_dict = rules.create_valid_suffix_dict('valid_suffix.txt')
 
 suffix_size_dict = rules.create_suffix_size_dict('suffix_sizes.txt')
 
+console_tag_serial_dict = rules.create_console_tags_serials_dict('console_tags_serials.txt')
+
 tempDir,extracted_list = rules.create_extracted_temp()
 
 #files = scan()
@@ -45,7 +47,7 @@ while files_type_dict['to_extract']:
 
 #processor(classified)
 processor.create_folders() 
-processor.processor(files_type_dict,tempDir,suffix_size_dict)
+processor.processor(files_type_dict,tempDir,suffix_size_dict,console_tag_serial_dict)
 
 
     

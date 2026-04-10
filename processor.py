@@ -2,7 +2,9 @@ from pathlib import Path
 import shutil
 import tempfile
 import re
+import logging
 
+logging.basicConfig(filename='processor.log',level=logging.debug)
 #This module will receive a dictionary from the classifier.classify_files() function 
 
 console_dict = {
@@ -67,25 +69,32 @@ def create_folders() -> None:
 
     this function doesn't return anything
     """
+    logging.debug("Creating ROMs folder...")
     ROMs_folder = Path() / "ROMs"
     ROMs_folder.mkdir(exist_ok=True)
-
+    
+    logging.debug("Creating to_compress folder...")
     to_compress_folder = Path() / "to_compress"
     to_compress_folder.mkdir(exist_ok=True)
-
+    
+    logging.debug("Creating unknown folder")
     unknown_folder = Path() / "unknown"
     unknown_folder.mkdir(exist_ok=True)
-
+    
+    logging.debug("Creating ambiguous folder")
     ambiguous_folder = Path() / "ambiguous"
     ambiguous_folder.mkdir(exist_ok=True)
 
+    logging.debug("Creating ambiguous_to_compress folder")
     ambiguous_to_compress_folder = Path() / "ambiguous_to_compress"
     ambiguous_to_compress_folder.mkdir(exist_ok=True)
 
     for console,dir_flag in console_dict.items():
+        logging.debug(f"Creating ROMs/{dir_flag[0]} subfolder")
         dest = Path() / "ROMs" / f"{dir_flag[0]}"
         dest.mkdir(exist_ok=True)
         if dir_flag[1] == True:
+            logging.debug(f"Creating to_compress/{dir_flag[0]} folder")
             dest = Path() / "to_compress" / f"to_compress_{dir_flag[0]}"
             dest.mkdir(exist_ok=True)
 
@@ -99,6 +108,7 @@ def normalize_file_name(file:Path) -> str:
 
 
 def size_name_serial_heuristic(file:Path,size_dict:dict,console_tag_serial:dict) -> str:
+
 
     #get candidates
     candidates = [candidate.lower() for candidate in extension_map[file.suffix]] if file.suffix in extension_map else []
@@ -114,10 +124,13 @@ def size_name_serial_heuristic(file:Path,size_dict:dict,console_tag_serial:dict)
         optimal_max = sizes[1] - 100
         if ext_console[0] == suffix and (sizes[0] <= size_of_file and size_of_file <= sizes[1]) and ext_console[1] in console_score:
             console_score[ext_console[1].lower()] += 3
+            logging.debug(f"{file.name} fits the size criteria of {ext_console[1]}: +3")
             if optimal_min <= size_of_file <= optimal_max and (sizes[1] - sizes[0] >= 300):
                 console_score[ext_console[1].lower()] += 4
+                logging.debug(f"{file.name} fits the size criteria of {ext_console[1]} in an optimal range: +4")
         elif ext_console[0] == suffix and (sizes[0] > size_of_file or size_of_file < sizes[1]):
             console_score[ext_console[1].lower()] -= 1
+            logging.debug(f"{file.name} its outside of the {ext_console[1]} file range : -1")
 
 
     normalized_file_name = normalize_file_name(file)
@@ -140,15 +153,19 @@ def size_name_serial_heuristic(file:Path,size_dict:dict,console_tag_serial:dict)
             serial_hits = list(filter(lambda p: extracted_serial.startswith(p), serials))
             if serial_hits:
                 console_score[match] += 10
+                logging.debug(f"The serial number of {file.name} matches the one of {match} +10")
     
     if candidates == []:
+        logging.debug("There were no candidates so returning unknown")
         return 'unknown'
     
     max_val = max(console_score.values())
 
     if max_val == 0:
+        logging.debug(f"Could not decide a path for {file.name}")
         return 'ambiguous'
     keys_max = [key for key, score in console_score.items() if score == max_val]
+    logging.debug(f"The console return by the heuristic is {keys_max[0]}")
     return keys_max[0] if len(keys_max) == 1 else 'ambiguous'
 
             
@@ -161,13 +178,14 @@ def resolve_console(file:Path,suffix_size_dict,console_tag_serial:dict) -> str:
     """Needs doc"""
     suffix = file.suffix
     if suffix not in extension_map:
-        print(f"{file.name} assigned unkown")
+        logging.debug(f"{file.name} assigned unkown")
         return 'unknown'
     elif len(extension_map[suffix]) == 1:
-        print(f"{file.name} assigned {extension_map[suffix][0]}")
+        logging.debug(f"{file.name} assigned {extension_map[suffix][0]}")
         return extension_map[suffix][0]
     elif len(extension_map[suffix]) > 1:
         result = size_name_serial_heuristic(file,suffix_size_dict,console_tag_serial)
+        logging.debug(f"{file.name} assigned to {result}")
         return result
         
 
@@ -186,7 +204,7 @@ def get_destination(console, to_compress=False):
     return Path() / 'ROMs' / console
 
 
-def processor(file_types: dict, tempDir: tempfile,suffix_size_dict:dict):
+def processor(file_types: dict, tempDir: tempfile,suffix_size_dict:dict,console_tag_serial:dict):
     """
     This function receives a dictionary for the type of file, a temporary Directory and a dictionary with the file sizes of each extension
     console combination
@@ -197,33 +215,32 @@ def processor(file_types: dict, tempDir: tempfile,suffix_size_dict:dict):
     The folder are created using the create_folders function
 
     This function will also delete the temporary directory used to store the extracted game files
-    """
+    """    
 
-    create_folders()
-    
-    for type, files in file_types.items():
-        if type == 'to_compress' or type == 'not_to_compress':
-            for file in files:
-                console= resolve_console(file,suffix_size_dict)
-                if type == 'to_compress':
-                    dest = get_destination(console,to_compress=True)
-                    dest.mkdir(parents=True,exist_ok=True)
-                    if file.exists():
-                        shutil.move(file,dest)
-                        print(f"Moved {file.name} to {dest.name}")
-                elif type == 'not_to_compress':
-                    dest = get_destination(console,to_compress=False)
-                    dest.mkdir(parents=True,exist_ok=True)
-                    if file.exists():
-                        shutil.move(file,dest)
-                        print(f"Moved {file.name} to {dest.name}")
-        else:
-            continue
+    with tempDir as tempDir:
+
+        for type, files in file_types.items():
+            if type == 'to_compress' or type == 'not_to_compress':
+                logging.debug("Moving files...")
+                for file in files:
+                    console= resolve_console(file,suffix_size_dict,console_tag_serial)
+                    if type == 'to_compress':
+                        dest = get_destination(console,to_compress=True)
+                        dest.mkdir(parents=True,exist_ok=True)
+                        if file.exists():
+                            shutil.move(file,dest)
+                            logging.debug(f"Moved {file.name} to {dest.name}")
+                    elif type == 'not_to_compress':
+                        dest = get_destination(console,to_compress=False)
+                        dest.mkdir(parents=True,exist_ok=True)
+                        if file.exists():
+                            shutil.move(file,dest)
+                            logging.debug(f"Moved {file.name} to {dest.name}")
+            else:
+                continue
                 
     
 
-    tempDir.close()
-    
                     
 
 

@@ -1,17 +1,24 @@
 from pathlib import Path
+import logging
+
+logging.basicConfig(filename='scanner.log',level=logging.DEBUG)
 
 def scan_directory(path:Path) -> list:
     """
     Scan the given directory recursively and returns a list of path objects of all files in that directory
     """
-    input_directory = Path("test_files")
     all_files = []
-    for file in input_directory.rglob('*'):
+    logging.debug("Going through files...")
+    for file in path.rglob('*'):
+        logging.debug(f"Scanning {file.name}")
         if file.is_file():
             all_files.append(file)
+    logging.debug(f"The list of files is: {all_files}")
     return all_files
 
-    
+
+test_path = Path('test_files')
+scan_directory(test_path)
 
 
 
