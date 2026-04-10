@@ -1,7 +1,50 @@
+NES	nes,famicom,fc	nes-,hvc-
+SNES	snes,super nintendo,sfc	sns-,shvc-
+N64	n64,nintendo 64	nus-
+GB	gb,gameboy,game boy	dmg-
+GBC	gbc,gameboy color	cgb-
+GBA	gba,gameboy advance	agb-
+NDS	nds,ds,nintendo ds	ntr-,twl-
+3DS	3ds,nintendo 3ds	ctr-,ktr-
+VB	vb,virtual boy	vua-
+POKEMINI	pokemon mini,pokemini	min-
+SWITCH	switch,nsw,nx	hac-,la-hac
+GC	gc,gamecube,gcn	dl-dol
+WII	wii	rvl-
+WIIU	wiiu,wii u	wup-
 PS1	ps1,psx,playstation	slus-0,sles-0,scus-9,sces-0,slps-0,slps-1
 PS2	ps2,playstation2,playstation 2	slus-2,sles-5,scus-97,sces-5,slpm
-Saturn	saturn	mk-,t-,gs-,hdr-
+PS3	ps3,playstation 3	blus,bles,bces,bcus,bcjs,bljs
+PS4	ps4,playstation 4	cusa,pljs,pljm
 PSP	psp	ulus,ules,ucus,uces,npjh,npuh
-GC	gc,gamecube,gcn	dl-dol
-Wii	wii	rvl-
+VITA	vita,psvita,ps vita	pcsb,pcse,pcsg,vcjs
+SG1000	sg1000,sg-1000	
+SMS	sms,master system	mk-,50-,70-,90-
 GENESIS	genesis,megadrive,md	mk-,t-
+32X	32x,sega 32x	mk-,t-
+SegaCD	segacd,sega cd,mega cd,mcd	mk-,t-
+Saturn	saturn	mk-,t-,gs-,hdr-
+DC	dc,dreamcast	t-,mk-,hdr-
+GG	gg,game gear	t-,g-
+XBOX	xbox,xbx	
+X360	x360,xbox360,xbox 360	
+A2600	a2600,atari 2600,2600	cx26
+A5200	a5200,atari 5200,5200	cx52
+A7800	a7800,atari 7800,7800	cx78
+LYNX	lynx,atari lynx	pa
+JAG	jag,jaguar,atari jaguar	j9
+PCE	pce,pc engine,turbografx,tg16	br,tj
+PCECD	pcecd,pc engine cd,turbografx cd,tgcd	acd,nxcd
+NEOGEO	neogeo,neo geo,aes,mvs	ngh-
+NGP	ngp,ngpc,neo geo pocket	neop-
+3DO	3do	fz-
+WS	ws,wsc,wonderswan	swj-
+INTV	intv,intellivision	
+COLECO	coleco,colecovision	
+VEC	vec,vectrex	
+AMIGA	amiga,commodore amiga	
+C64	c64,commodore 64	
+ZXS	zxs,zx spectrum	
+MSX	msx	
+CPC	cpc,amstrad cpc	
+AppleII	apple2,apple ii

@@ -19,7 +19,7 @@ valid_suffix_dict = rules.create_valid_suffix_dict('valid_suffix.txt')
 
 suffix_size_dict = rules.create_suffix_size_dict('suffix_sizes.txt')
 
-console_tag_serial_dict = rules.create_console_tags_serials_dict('console_tags_serials.txt')
+console_tag_serial_dict = rules.create_tag_serial_dict('console_tags_serials.txt')
 
 tempDir,extracted_list = rules.create_extracted_temp()
 
@@ -41,7 +41,7 @@ while files_type_dict['to_extract']:
     copy_to_extract_files = files_type_dict['to_extract'].copy()
     files_type_dict['to_extract'].clear()
     extracted_list.clear() #this is the list of files that were already extracted, it makes sense to clear it before in order to make sure we are not always dealing with the same files
-    extractor.get_zipped_files(copy_to_extract_files,tempDir,extracted_list)
+    extractor.get_archive_files(copy_to_extract_files,tempDir,extracted_list)
     classifier.classify_files(extracted_list,files_type_dict,valid_suffix_dict)
 
 
@@ -49,7 +49,7 @@ while files_type_dict['to_extract']:
 processor.create_folders() 
 processor.processor(files_type_dict,tempDir,suffix_size_dict,console_tag_serial_dict)
 
-
+#compresser
     
     
 

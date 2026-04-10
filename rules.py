@@ -39,15 +39,17 @@ def create_suffix_size_dict(file) -> dict:
     with open(file,'r') as f:
         suffix_size_file = csv.reader(f,delimiter='\t')
         for row in suffix_size_file:
-            suffix_size_dict[(row[0],row[1])] = (int(row[2]), int(row[3]),row[4])
+            suffix_size_dict[(row[0],row[1])] = (float(row[2]), float(row[3]),row[4])
     return suffix_size_dict
 
-def create_console_tags_serials_dict(file) -> dict:
-    console_tag_serials_dict = {}
-    with open(file,'r') as f:
-        console_tag_serials_file = csv.reader(f,delimiter='\t')
-        for row in console_tag_serials_file:
-            console_tag_serials_dict[row[0]] = (row[1].split(','),row[2].split(','))
-    return console_tag_serials_dict
+def create_tag_serial_dict(file) -> dict:
+    tag_serial_dict = {}
+    with open(file, 'r', encoding='utf-8') as f:
+        reader = csv.reader(f, delimiter='\t')
+        for row in reader:
+            console_key = row[0]
+            tags = row[1].split(',')
+            serials = row[2].split(',') if len(row) > 2 and row[2].strip() else []
+            tag_serial_dict[console_key] = (tags, serials)
+    return tag_serial_dict
 
-print(create_console_tags_serials_dict('console_tags_serials.txt'))
