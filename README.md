@@ -70,3 +70,22 @@ Due to licensing and file size limits, the external compression and extraction t
 * **[CHDMAN](https://www.mamedev.org/release.html):** The industry standard for optical media compression. CHDMAN is officially distributed as part of the MAME emulator. Download the latest MAME release, extract it, find `chdman.exe` inside, and copy it to your `tools/` folder.
 * **[MaxCSO](https://github.com/unknownbrackets/maxcso/releases):** The fastest and most efficient PSP ISO compressor. Go to the official GitHub Releases page, download the latest Windows `.zip`, and extract `maxcso.exe` to your `tools/` folder.
 * **[Dolphin Emulator](https://dolphin-emu.org/download/):** Required for converting GameCube and Wii games to `.rvz`. Download the latest Beta or Development version of Dolphin (Windows x64). Extract the entire folder, rename it to `Dolphin-x64`, and place the whole folder inside your `tools/` directory. *(Ensure `DolphinTool.exe` is inside it!)*
+
+## 🚀 How to Use
+
+### If using the Standalone App (.exe)
+1. Download the latest ZIP from the **Releases** tab and extract it.
+2. Ensure you have downloaded the required external tools (Dolphin, etc.) and placed them in the `tools/` folder.
+3. Double-click **`ROMOrganizer.exe`** to launch the application.
+
+### If running from Source (Python)
+1. Ensure you have Python 3.8+ installed.
+2. Open your terminal in the project folder and run: `python main.py`
+
+### 🎮 The Organizing Process
+Once the application window is open, the process is incredibly simple:
+
+1. **Input Directory:** Click "Browse" and select the folder containing your messy, unorganized files (e.g., your generic "Downloads" folder filled with `.zip` files, `.iso` dumps, and `.bin/.cue` sets).
+2. **Output Directory:** Click "Browse" and select your clean destination folder (e.g., your external hard drive or emulator frontend folder). *Note: The app will automatically create a `ROMs` subfolder inside this destination.*
+3. **Start:** Click the **START ORGANIZING** button.
+4. **Watch the Magic:** A progress window will appear. The tool will automatically begin extracting archives, identifying games, routing them to the correct console folders, and running the compression tools. You can watch the live log feed to see exactly what the engine is doing!
