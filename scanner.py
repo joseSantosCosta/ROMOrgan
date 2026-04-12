@@ -16,9 +16,6 @@ def scan_directory(path:Path) -> list:
     return all_files
 
 
-test_path = Path('test_files')
-scan_directory(test_path)
-
 
 
     

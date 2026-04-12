@@ -7,6 +7,7 @@ import json
 import hashlib
 
 #This module will receive a dictionary from the classifier.classify_files() function 
+BASE_DIR = Path(__file__).parent.absolute()
 
 console_dict = {
     # --- Nintendo ---
@@ -374,7 +375,8 @@ def size_name_serial_heuristic(file:Path, size_dict:dict, console_tag_serial:dic
         logging.debug(f"Heuristic winner determined: {keys_max[0]} (Score: {max_val})")
         return keys_max[0]
     else:
-        with open('titles_db.json', 'r', encoding='utf-8') as f:
+        db_path = BASE_DIR / 'titles_db.json'
+        with open(db_path, 'r', encoding='utf-8') as f:
             titles = json.load(f)
             json_candidates = [key for key in keys_max if normalized_file_name in titles.get(key, {})]
             

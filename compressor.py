@@ -73,14 +73,34 @@ def compressor():
                 logging.info(f"Moving {str(output_file)} to {dest.absolute()}")
                 shutil.move(output_file,dest)
 
-                if game.suffix.lower() in ['.cue', '.gdi']:
-                    for associated_file in game.parent.glob(f"{game.stem}*"):
-                        if associated_file.suffix.lower() in ['.cue', '.bin', '.gdi', '.raw']:
-                            associated_file.unlink(missing_ok=True)
-                else:
+                import time
+                time.sleep(1) # Fix 1: Give Windows 1 second to release the file lock!
+
+                try:
+                    original_ext = game.suffix.lower()
+                    
+                    if original_ext in ['.cue', '.gdi']:
+                        # Fix 2: Read the .cue file to find exact track names (even if they don't match)
+                        if original_ext == '.cue':
+                            with open(game, 'r', encoding='utf-8', errors='ignore') as f:
+                                # This regex finds any filename wrapped in quotes inside the cue text
+                                for track in re.findall(r'"([^"]+)"', f.read()):
+                                    (game.parent / track).unlink(missing_ok=True)
+                                    
+                        # Fallback: Sweep anything that shares the exact same base name
+                        for associated_file in game.parent.glob(f"{game.stem}*"):
+                            if associated_file.suffix.lower() in ['.cue', '.bin', '.gdi', '.raw']:
+                                associated_file.unlink(missing_ok=True)
+
+                    # Finally, delete the primary file (.iso, .wbfs, or the leftover .cue)
                     game.unlink(missing_ok=True)
+                    logging.info(f"Cleaned up original uncompressed files for {game.name}")
+                    
+                except Exception as e:
+                    # If it STILL fails, it will now throw a loud error in your UI instead of silently failing
+                    logging.error(f"⚠️ Could not delete original files for {game.name}: {e}")
             else:
-                logging.error(f"❌ Failed to compress {game.name}:\nSTDOUT: {result.stdout}\nSTDERR: {result.stderr}")
+                logging.error(f"Failed to compress {game.name}:\nSTDOUT: {result.stdout}\nSTDERR: {result.stderr}")
     
 
 
