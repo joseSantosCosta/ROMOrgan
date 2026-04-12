@@ -46,6 +46,33 @@ logging.basicConfig(
         logging.StreamHandler(sys.stdout)
     ])
 
+def verify_tools(self):
+        """Checks if all required external tools exist in the tools/ folder."""
+        # This handles both running as a script AND running as a compiled .exe
+        import sys
+        if getattr(sys, 'frozen', False):
+            BASE_DIR = Path(sys._MEIPASS)
+        else:
+            BASE_DIR = Path(__file__).parent.absolute()
+
+        tools_dir = BASE_DIR / "tools"
+
+        # Dictionary of tools and their expected paths
+        required_tools = {
+            "CHDMAN": tools_dir / "chdman.exe",
+            "MaxCSO": tools_dir / "maxcso.exe",
+            "DolphinTool": tools_dir / "Dolphin-x64" / "DolphinTool.exe",
+            "UnRAR": tools_dir / "UnRar.exe" # (Remove this line if you didn't add UnRAR)
+        }
+
+        missing_tools = []
+        for name, path in required_tools.items():
+            if not path.exists():
+                missing_tools.append(name)
+
+        return missing_tools
+
+
 # --- 2. GUI TEXT HANDLER ---
 # This intercepts the logs and pushes them to the UI text box
 class TextHandler(logging.Handler):
@@ -113,10 +140,16 @@ class ROMOrganizerApp:
             tk.messagebox.showwarning("Missing Folders", "Please select both an Input and Output directory!")
             return
 
-        self.root.withdraw() # Hide main window
-        self.build_progress_window() # Show progress window
+        missing = self.verify_tools()
+        if missing:
+            missing_list = "\n• ".join([""] + missing)
+            error_msg = f"Cannot start! The following required tools are missing from your 'tools' folder:{missing_list}\n\nPlease check the README, download them, and try again."
+            
+            tk.messagebox.showerror("Missing External Tools", error_msg)
+            return
 
-        # Start your script in a background thread so the UI doesn't freeze!
+        self.root.withdraw() 
+        self.build_progress_window() 
         threading.Thread(target=self.run_backend_script, args=(input_dir, output_dir), daemon=True).start()
 
     def build_progress_window(self):
