@@ -6,7 +6,6 @@ from pathlib import Path
 import tkinter as tk
 from tkinter import ttk, filedialog, scrolledtext
 
-# --- HOME MADE MODULES ---
 import rules
 import scanner
 import classifier
@@ -16,14 +15,12 @@ import compressor
 import cleaner
 
 
-# --- BASE DIR HANDLING ---
 if getattr(sys, 'frozen', False):
     BASE_DIR = Path(sys._MEIPASS)
 else:
     BASE_DIR = Path(__file__).parent.absolute()
 
 
-# --- LOGGING SETUP ---
 logging.basicConfig(
     level=logging.INFO,
     format='[%(levelname)s] %(message)s',
@@ -34,7 +31,7 @@ logging.basicConfig(
 )
 
 
-# --- GUI LOG HANDLER ---
+
 class TextHandler(logging.Handler):
     def __init__(self, text_widget):
         super().__init__()
@@ -50,14 +47,14 @@ class TextHandler(logging.Handler):
         self.text_widget.after(0, append)
 
 
-# --- MAIN APP ---
+
 class ROMOrganizerApp:
     def __init__(self, root):
         self.root = root
         self.root.title("ROM Organizer v1.0")
         self.root.geometry("550x320")
 
-        # --- RETRO THEME ---
+        
         self.BG = "#0b0b0b"
         self.FG = "#00ff9c"
         self.ACCENT = "#00cc7a"
@@ -86,7 +83,6 @@ class ROMOrganizerApp:
         font_main = ("Courier New", 10)
         font_title = ("Courier New", 11, "bold")
 
-        # INPUT
         tk.Label(self.root, text="> INPUT DIRECTORY", bg=self.BG, fg=self.FG, font=font_title).pack(anchor="w")
         input_frame = tk.Frame(self.root, bg=self.BG)
         input_frame.pack(fill="x", pady=(5, 15))
@@ -99,7 +95,7 @@ class ROMOrganizerApp:
                   relief="flat", command=self.browse_input)\
             .pack(side="right")
 
-        # OUTPUT
+       
         tk.Label(self.root, text="> OUTPUT DIRECTORY", bg=self.BG, fg=self.FG, font=font_title).pack(anchor="w")
         output_frame = tk.Frame(self.root, bg=self.BG)
         output_frame.pack(fill="x", pady=(5, 20))
@@ -112,7 +108,7 @@ class ROMOrganizerApp:
                   relief="flat", command=self.browse_output)\
             .pack(side="right")
 
-        # START BUTTON
+        
         tk.Button(self.root, text=">>> START <<<", bg="#001a12", fg=self.FG,
                   font=("Courier New", 12, "bold"), relief="flat",
                   command=self.start_process)\
@@ -187,7 +183,7 @@ class ROMOrganizerApp:
         text_handler.setFormatter(logging.Formatter('[%(levelname)s] %(message)s'))
         logger.addHandler(text_handler)
 
-    # --- PIPELINE ---
+     
     def run_backend_script(self, input_dir, output_dir):
         try:
             logging.info("BOOTING ROM ORGANIZER...")
@@ -230,7 +226,7 @@ class ROMOrganizerApp:
             self.progress_bar.config(mode='determinate', value=100)
 
 
-# --- RUN ---
+
 if __name__ == "__main__":
     root = tk.Tk()
     app = ROMOrganizerApp(root)

@@ -74,25 +74,25 @@ def compressor():
                 shutil.move(output_file,dest)
 
                 import time
-                time.sleep(1) # Fix 1: Give Windows 1 second to release the file lock!
+                time.sleep(1) 
 
                 try:
                     original_ext = game.suffix.lower()
                     
                     if original_ext in ['.cue', '.gdi']:
-                        # Fix 2: Read the .cue file to find exact track names (even if they don't match)
+                        
                         if original_ext == '.cue':
                             with open(game, 'r', encoding='utf-8', errors='ignore') as f:
                                 # This regex finds any filename wrapped in quotes inside the cue text
                                 for track in re.findall(r'"([^"]+)"', f.read()):
                                     (game.parent / track).unlink(missing_ok=True)
                                     
-                        # Fallback: Sweep anything that shares the exact same base name
+                        
                         for associated_file in game.parent.glob(f"{game.stem}*"):
                             if associated_file.suffix.lower() in ['.cue', '.bin', '.gdi', '.raw']:
                                 associated_file.unlink(missing_ok=True)
 
-                    # Finally, delete the primary file (.iso, .wbfs, or the leftover .cue)
+                    
                     game.unlink(missing_ok=True)
                     logging.info(f"Cleaned up original uncompressed files for {game.name}")
                     
