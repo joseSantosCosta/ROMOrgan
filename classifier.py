@@ -2,7 +2,7 @@ from pathlib import Path
 import csv
 import logging
 
-logging.basicConfig(filename="classifier.log",level=logging.DEBUG)
+
 
 def classify_files(files: list,files_type:dict,valid_suffix:dict) -> None:
     """

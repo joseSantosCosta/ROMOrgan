@@ -6,7 +6,6 @@ import logging
 import json
 import hashlib
 
-logging.basicConfig(filename='processor.log',level=logging.debug)
 #This module will receive a dictionary from the classifier.classify_files() function 
 
 console_dict = {
@@ -244,12 +243,12 @@ def create_folders() -> None:
     ambiguous_to_compress_folder.mkdir(exist_ok=True)
 
     for console,dir_flag in console_dict.items():
-        logging.debug(f"Creating ROMs/{dir_flag[0]} subfolder")
-        dest = Path() / "ROMs" / f"{dir_flag[0]}"
+        logging.debug(f"Creating ROMs/{console} subfolder")
+        dest = Path() / "ROMs" / f"{console}"
         dest.mkdir(exist_ok=True)
         if dir_flag[1] == True:
-            logging.debug(f"Creating to_compress/{dir_flag[0]} folder")
-            dest = Path() / "to_compress" / f"to_compress_{dir_flag[0]}"
+            logging.debug(f"Creating to_compress/{console} folder")
+            dest = Path() / "to_compress" / f"{console}_to_compress"
             dest.mkdir(exist_ok=True)
 
 def normalize_file_name(file: Path) -> str:
@@ -424,7 +423,7 @@ def get_destination(console, to_compress=False):
         return Path() / ('ambiguous_to_compress' if to_compress else 'ambiguous')
 
     if to_compress:
-        return Path() / 'to_compress' / f"to_compress_{console}"
+        return Path() / 'to_compress' / f"{console}_to_compress"
 
     return Path() / 'ROMs' / console
 

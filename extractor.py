@@ -4,9 +4,6 @@ import logging
 import patoolib
 from patoolib.util import PatoolError
 
-logging.basicConfig(filename='extractor.log',level=logging.INFO)
-
-
 def get_archive_files(to_extract_f:list,extracted_dir:dir,extracted:list) -> None:
     """
     This function receives a list of zip archives, a temp dir and a list of extracted files,

@@ -18,7 +18,7 @@
 .col	rom	N
 .crt	rom	N
 .cso	rom	N
-.cue	aux	N
+.cue	aux	Y
 .cxi	rom	N
 .d64	rom	N
 .dat	aux	N

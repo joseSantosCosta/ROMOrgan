@@ -1,7 +1,6 @@
 from pathlib import Path
 import logging
 
-logging.basicConfig(filename='scanner.log',level=logging.DEBUG)
 
 def scan_directory(path:Path) -> list:
     """
