@@ -1,0 +1,35 @@
+workflow.txt
+test_files*/
+.venv/
+*.log
+*.exe
+helper_data.py
+UnRAR.exe
+databases/
+create_json.py
+__pycache__/
+tools/
+
+# Python junk
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+
+# PyInstaller junk
+build/
+dist/
+*.spec
+
+# Local Logs & Data
+*.log
+to_compress/
+ROMs/
+test_output/
+test_input/
+temp_extracted/
+
+# Binaries (Don't upload .exe files to the main repo)
+tools/
+*.exe
