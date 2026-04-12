@@ -59,4 +59,14 @@ Your folder structure **must** look exactly like this:
       └── 📁 Dolphin-x64/    <-- (The full Dolphin Emulator folder, used for GC/Wii)
            ├── 📄 DolphinTool.exe
            ├── 📄 Qt6Core.dll
-           └── 📁 Sys/
+           └── 📁 Sys/ 
+```
+
+### 4. Downloading the Required Tools
+Due to licensing and file size limits, the external compression and extraction tools are not bundled with this script. You will need to download them and place them in the `tools/` folder as shown above.
+
+* **[7-Zip](https://www.7-zip.org/) (System Install):** Highly recommended. The Python extraction engine relies on your system's archivers. Install 7-Zip normally on your Windows machine to ensure `.7z` and `.zip` files are handled smoothly.
+* **[UnRAR for Windows](https://www.rarlab.com/rar_add.htm):** Required if you have `.rar` files in your collection. Download the "UnRAR for Windows" command-line utility and place `UnRar.exe` directly inside your `tools/` folder.
+* **[CHDMAN](https://www.mamedev.org/release.html):** The industry standard for optical media compression. CHDMAN is officially distributed as part of the MAME emulator. Download the latest MAME release, extract it, find `chdman.exe` inside, and copy it to your `tools/` folder.
+* **[MaxCSO](https://github.com/unknownbrackets/maxcso/releases):** The fastest and most efficient PSP ISO compressor. Go to the official GitHub Releases page, download the latest Windows `.zip`, and extract `maxcso.exe` to your `tools/` folder.
+* **[Dolphin Emulator](https://dolphin-emu.org/download/):** Required for converting GameCube and Wii games to `.rvz`. Download the latest Beta or Development version of Dolphin (Windows x64). Extract the entire folder, rename it to `Dolphin-x64`, and place the whole folder inside your `tools/` directory. *(Ensure `DolphinTool.exe` is inside it!)*
