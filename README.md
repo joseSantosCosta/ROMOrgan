@@ -1,4 +1,4 @@
-# 🎮 ROMOrgan
+#  ROMOrgan
 
 An automated, intelligent Python pipeline with a native GUI designed to sort, extract, verify, and aggressively compress retro video game ROMs and disc images. 
 
@@ -16,7 +16,7 @@ Instead of manually sorting through terabytes of messy `.zip`, `.7z`, `.bin/.cue
 
 ---
 
-## 📂 Project Structure
+##  Project Structure
 
 The project is broken down into specialized modules that handle specific parts of the pipeline:
 
@@ -31,7 +31,7 @@ The project is broken down into specialized modules that handle specific parts o
 
 ---
 
-## 🛠️ Prerequisites & Setup
+##  Prerequisites & Setup
 
 ### 1. Python Requirements
 This script requires **Python 3.8+**. It uses standard library modules (`tkinter`, `pathlib`, `subprocess`, `logging`, `hashlib`, `re`, `shutil`), so no massive `pip install` packages are required for the core logic (though `patool` or similar may be required depending on your `extractor.py` implementation).
@@ -71,7 +71,7 @@ Due to licensing and file size limits, the external compression and extraction t
 * **[MaxCSO](https://github.com/unknownbrackets/maxcso/releases):** The fastest and most efficient PSP ISO compressor. Go to the official GitHub Releases page, download the latest Windows `.zip`, and extract `maxcso.exe` to your `tools/` folder.
 * **[Dolphin Emulator](https://dolphin-emu.org/download/):** Required for converting GameCube and Wii games to `.rvz`. Download the latest Beta or Development version of Dolphin (Windows x64). Extract the entire folder, rename it to `Dolphin-x64`, and place the whole folder inside your `tools/` directory. *(Ensure `DolphinTool.exe` is inside it!)*
 
-## 🚀 How to Use
+##  How to Use
 
 ### If using the Standalone App (.exe)
 1. Download the latest ZIP from the **Releases** tab and extract it.
@@ -82,7 +82,7 @@ Due to licensing and file size limits, the external compression and extraction t
 1. Ensure you have Python 3.8+ installed.
 2. Open your terminal in the project folder and run: `python main.py`
 
-### 🎮 The Organizing Process
+###  The Organizing Process
 Once the application window is open, the process is incredibly simple:
 
 1. **Input Directory:** Click "Browse" and select the folder containing your messy, unorganized files (e.g., your generic "Downloads" folder filled with `.zip` files, `.iso` dumps, and `.bin/.cue` sets).
