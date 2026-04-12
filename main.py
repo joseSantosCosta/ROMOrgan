@@ -8,11 +8,13 @@ import classifier
 import extractor
 import processor
 import compressor
+import cleaner
 
 logging.basicConfig(
     level=logging.INFO, # Change to logging.INFO later if DEBUG is too noisy
     format='%(levelname)s: %(message)s',
-    stream=sys.stdout
+    stream=sys.stdout,
+    filename='main.log'
 )
 
 files_type_dict = rules.create_file_types_dict()
@@ -48,6 +50,9 @@ processor.processor(files_type_dict,tempDir,suffix_size_dict,console_tag_serial_
 
 #compress the files
 compressor.compressor() #this will look directly into the 'to_compress' directory created
+
+#delete empty directories
+cleaner.clean_empty(Path())
 
 
 
