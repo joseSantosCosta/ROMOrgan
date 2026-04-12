@@ -16,6 +16,16 @@ import processor
 import compressor
 import cleaner
 
+import sys
+import os
+
+if getattr(sys, 'frozen', False):
+    # If running as a bundled exe, use the exe's folder
+    BASE_DIR = Path(sys._MEIPASS)
+else:
+    # If running as a script, use the script's folder
+    BASE_DIR = Path(__file__).parent.absolute()
+
 
 root_logger = logging.getLogger()
 
