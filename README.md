@@ -60,26 +60,3 @@ Your folder structure **must** look exactly like this:
            ├── 📄 DolphinTool.exe
            ├── 📄 Qt6Core.dll
            └── 📁 Sys/
----
-
-## 🚀 How to Use
-
-1. Double-click **`main.py`** (or run `python main.py` in your terminal).
-2. The ROM Organizer window will appear.
-3. **Input Directory:** Select the folder containing your messy ROMs, `.zip` files, and `.iso` dumps.
-4. **Output Directory:** Select the destination folder where you want your clean, organized `ROMs` folder to be generated.
-5. Click **START ORGANIZING**.
-6. A progress window will appear. The script runs on a background thread, streaming live logs to the UI so you can watch it extract, match, move, and compress your library in real-time.
-
----
-
-## ⚙️ How the Pipeline Works (The Flow)
-
-1. **Scan:** Reads all files in the Input Directory.
-2. **First Pass Classification:** Identifies immediate ROMs vs. Archives.
-3. **Extraction:** Archives are unpacked. Extracted contents are fed *back* into the classifier.
-4. **Processing & Routing:** * If a file is a cartridge game (`.nes`, `.sfc`), it goes straight to the Output `ROMs/` folder.
-    * If a file is uncompressed optical media (`.iso`, `.bin/.cue`, `.gdi`), it is identified via heuristics/deep-scanning and routed to a staging folder (e.g., `to_compress/PS2_to_compress/`).
-5. **Compression:** The script loops through the staging folders, firing off the correct command-line tool (`createcd`, `convert -f rvz`, `--out cso`).
-6. **Self-Healing Cleanup:** Upon a successful compression (Return Code 0), the script parses the original `.cue` files to find exact track names, waits for Windows to release file locks, deletes the heavy uncompressed `.bin`/`.iso` files, and moves the new `.chd`/`.rvz` to the final `ROMs/` folder.
-7. **Sweep:** Empty staging folders are silently removed.
