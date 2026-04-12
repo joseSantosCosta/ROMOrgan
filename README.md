@@ -1,4 +1,4 @@
-#  ROMOrgan
+#  ROMOrgan (still in progress)
 
 An automated, intelligent Python pipeline with a native GUI designed to sort, extract, verify, and aggressively compress retro video game ROMs and disc images. 
 
