@@ -10,6 +10,7 @@ create_json.py
 __pycache__/
 tools/
 todo.txt
+exe_command.txt
 
 # Python junk
 __pycache__/
