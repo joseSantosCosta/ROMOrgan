@@ -14,7 +14,9 @@ def clean_empty(output_dir:Path):
                     logging.info(f"Deleting {subdir.name}")
                     subdir.rmdir()
             logging.info(f"Deleting {dir.name}")
-            dir.rmdir()
+            if len(os.listdir(dir)) == 0:
+                dir.rmdir()
+                
 
 
                 

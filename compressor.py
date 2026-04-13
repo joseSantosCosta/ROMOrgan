@@ -35,7 +35,7 @@ def identify_console(directory:Path):
     return match
 
 
-def compressor():
+def compressor(to_keep:bool):
     input_dir = Path() / 'to_compress'
 
     for dir in input_dir.glob('*'):
@@ -79,28 +79,51 @@ def compressor():
                 try:
                     original_ext = game.suffix.lower()
                     
-                    if original_ext in ['.cue', '.gdi']:
-                        
+                    if to_keep == False:
+                       
                         if original_ext == '.cue':
                             with open(game, 'r', encoding='utf-8', errors='ignore') as f:
-                                # This regex finds any filename wrapped in quotes inside the cue text
                                 for track in re.findall(r'"([^"]+)"', f.read()):
                                     (game.parent / track).unlink(missing_ok=True)
                                     
-                        
-                        for associated_file in game.parent.glob(f"{game.stem}*"):
-                            if associated_file.suffix.lower() in ['.cue', '.bin', '.gdi', '.raw']:
-                                associated_file.unlink(missing_ok=True)
+                        if original_ext in ['.cue', '.gdi']:
+                            for associated_file in game.parent.glob(f"{game.stem}*"):
+                                if associated_file.suffix.lower() in ['.cue', '.bin', '.gdi', '.raw']:
+                                    associated_file.unlink(missing_ok=True)
 
-                    
-                    game.unlink(missing_ok=True)
-                    logging.info(f"Cleaned up original uncompressed files for {game.name}")
-                    
+                        
+                        game.unlink(missing_ok=True)
+                        logging.info(f"Cleaned up original uncompressed files for {game.name}")
+                        
+                    else:
+                        
+                        new_dest = Path() / 'ROMs_Uncompressed' / console
+                        new_dest.mkdir(parents=True, exist_ok=True) 
+                        
+                        
+                        if original_ext in ['.cue', '.gdi']:
+                            
+                            if original_ext == '.cue':
+                                with open(game, 'r', encoding='utf-8', errors='ignore') as f:
+                                    for track in re.findall(r'"([^"]+)"', f.read()):
+                                        track_path = game.parent / track
+                                        if track_path.exists():
+                                            shutil.move(str(track_path), str(new_dest))
+                            
+                            
+                            for associated_file in game.parent.glob(f"{game.stem}*"):
+                                if associated_file.suffix.lower() in ['.cue', '.bin', '.gdi', '.raw']:
+                                    if associated_file.exists(): 
+                                        shutil.move(str(associated_file), str(new_dest))
+                        
+        
+                        if game.exists():
+                            shutil.move(str(game), str(new_dest))
+                            
+                        logging.info(f"Moved original uncompressed files for {game.name} to {new_dest.absolute()}")
+
                 except Exception as e:
-                    # If it STILL fails, it will now throw a loud error in your UI instead of silently failing
-                    logging.error(f"⚠️ Could not delete original files for {game.name}: {e}")
-            else:
-                logging.error(f"Failed to compress {game.name}:\nSTDOUT: {result.stdout}\nSTDERR: {result.stderr}")
+                    logging.error(f"⚠️ Error handling original files for {game.name}: {e}")
     
 
 

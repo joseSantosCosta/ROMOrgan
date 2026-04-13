@@ -210,7 +210,74 @@ extension_map = {
     ".zso": ["PSP", "PS2"],    # Zstandard Compressed ISO
 }
 
-#file=Path(r'd:/file.jpg').stat().st_size -> get the size of a file
+# Formato: "INTERNAL_TAG": ["Alias 1", "Alias 2", "Nome Padrão"]
+console_dict = {
+    # --- Nintendo ---
+    "NES": ["NES", "Nintendo Entertainment System", "Nintendo"],
+    "SNES": ["SNES", "Super Nintendo", "Super Famicom", "Super Nintendo Entertainment System"],
+    "N64": ["N64", "Nintendo 64"],
+    "GB": ["GB", "Game Boy", "Gameboy", "Nintendo Game Boy"],
+    "GBC": ["GBC", "Game Boy Color", "Gameboy Color"],
+    "GBA": ["GBA", "Game Boy Advance", "Gameboy Advance"],
+    "NDS": ["NDS", "DS", "Nintendo DS"],
+    "3DS": ["3DS", "Nintendo 3DS"],
+    "VB": ["VB", "Virtual Boy", "Nintendo Virtual Boy"],
+    "POKEMINI": ["Pokemon Mini", "PokeMini"],
+    "SWITCH": ["SWITCH", "Nintendo Switch", "NS"],
+    "GC": ["GC", "GameCube", "Game Cube", "Nintendo GameCube", "GCN"],
+    "WII": ["WII", "Wii", "Nintendo Wii"],
+    "WIIU": ["WIIU", "Wii U", "Nintendo Wii U"],
+
+    # --- Sony ---
+    "PS1": ["PS1", "PSX", "PlayStation", "PlayStation 1", "Sony PlayStation"],
+    "PS2": ["PS2", "PlayStation 2", "Sony PlayStation 2", "PS2 ISO"],
+    "PS3": ["PS3", "PlayStation 3", "Sony PlayStation 3"],
+    "PS4": ["PS4", "PlayStation 4"],
+    "PSP": ["PSP", "PlayStation Portable", "Sony PSP"],
+    "VITA": ["VITA", "PS Vita", "PlayStation Vita"],
+
+    # --- Sega ---
+    "SG1000": ["SG1000", "SG-1000", "Sega SG-1000"],
+    "SMS": ["SMS", "Master System", "Sega Master System"],
+    "GENESIS": ["GENESIS", "Mega Drive", "Sega Genesis", "Sega Mega Drive", "Megadrive"],
+    "32X": ["32X", "Sega 32X", "Sega Genesis 32X"],
+    "SegaCD": ["SegaCD", "Sega CD", "Mega CD", "Sega Mega-CD"],
+    "Saturn": ["Saturn", "Sega Saturn"],
+    "DC": ["DC", "Dreamcast", "Sega Dreamcast"],
+    "GG": ["GG", "Game Gear", "Sega Game Gear"],
+
+    # --- Microsoft ---
+    "XBOX": ["XBOX", "Xbox", "Microsoft Xbox", "Original Xbox"],
+    "X360": ["X360", "Xbox 360", "Microsoft Xbox 360"],
+
+    # --- Atari ---
+    "A2600": ["A2600", "Atari 2600", "VCS"],
+    "A5200": ["A5200", "Atari 5200"],
+    "A7800": ["A7800", "Atari 7800"],
+    "LYNX": ["LYNX", "Atari Lynx", "Lynx"],
+    "JAG": ["JAG", "Atari Jaguar", "Jaguar"],
+
+    # --- NEC / TurboGrafx ---
+    "PCE": ["PCE", "PC Engine", "TurboGrafx-16", "TG16"],
+    "PCECD": ["PCECD", "PC Engine CD", "TurboGrafx-CD", "TGCD"],
+
+    # --- SNK / Neo Geo ---
+    "NEOGEO": ["NEOGEO", "Neo Geo", "Neo-Geo MVS", "Neo-Geo AES"],
+    "NGP": ["NGP", "Neo Geo Pocket", "NGPC", "Neo Geo Pocket Color"],
+
+    # --- Microcomputers & Others ---
+    "3DO": ["3DO", "Panasonic 3DO", "3DO Interactive Multiplayer"],
+    "WS": ["WS", "WonderSwan", "Bandai WonderSwan", "WSC", "WonderSwan Color"],
+    "INTV": ["INTV", "Intellivision", "Mattel Intellivision"],
+    "COLECO": ["COLECO", "ColecoVision", "Coleco"],
+    "VEC": ["VEC", "Vectrex"],
+    "AMIGA": ["AMIGA", "Commodore Amiga", "Amiga 500"],
+    "C64": ["C64", "Commodore 64", "C-64"],
+    "ZXS": ["ZXS", "ZX Spectrum", "Sinclair ZX Spectrum"],
+    "MSX": ["MSX", "Microsoft MSX"],
+    "CPC": ["CPC", "Amstrad CPC"],
+    "AppleII": ["AppleII", "Apple II", "Apple 2"],
+}
 
 def create_folders() -> None:
     """
@@ -413,6 +480,9 @@ def resolve_console(file:Path,suffix_size_dict,console_tag_serial:dict) -> str:
         result = size_name_serial_heuristic(file,suffix_size_dict,console_tag_serial)
         logging.debug(f"{file.name} assigned to {result}")
         return result
+
+def get_existing_console_folder(output_dir:Path,target_console):
+    return None
         
 
 

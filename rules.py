@@ -53,3 +53,4 @@ def create_tag_serial_dict(file) -> dict:
             tag_serial_dict[console_key] = (tags, serials)
     return tag_serial_dict
 
+

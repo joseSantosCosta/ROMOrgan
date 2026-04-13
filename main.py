@@ -52,9 +52,8 @@ class ROMOrganizerApp:
     def __init__(self, root):
         self.root = root
         self.root.title("ROM Organizer v1.0")
-        self.root.geometry("550x320")
+        self.root.geometry("550x360") 
 
-        
         self.BG = "#0b0b0b"
         self.FG = "#00ff9c"
         self.ACCENT = "#00cc7a"
@@ -64,6 +63,9 @@ class ROMOrganizerApp:
 
         self.input_path_var = tk.StringVar()
         self.output_path_var = tk.StringVar()
+
+        self.keep_extract_var = tk.BooleanVar(value=False)
+        self.keep_compress_var = tk.BooleanVar(value=False)
 
         self.build_main_window()
 
@@ -82,6 +84,7 @@ class ROMOrganizerApp:
     def build_main_window(self):
         font_main = ("Courier New", 10)
         font_title = ("Courier New", 11, "bold")
+        font_small = ("Courier New", 8) 
 
         tk.Label(self.root, text="> INPUT DIRECTORY", bg=self.BG, fg=self.FG, font=font_title).pack(anchor="w")
         input_frame = tk.Frame(self.root, bg=self.BG)
@@ -95,10 +98,10 @@ class ROMOrganizerApp:
                   relief="flat", command=self.browse_input)\
             .pack(side="right")
 
-       
+        
         tk.Label(self.root, text="> OUTPUT DIRECTORY", bg=self.BG, fg=self.FG, font=font_title).pack(anchor="w")
         output_frame = tk.Frame(self.root, bg=self.BG)
-        output_frame.pack(fill="x", pady=(5, 20))
+        output_frame.pack(fill="x", pady=(5, 10)) 
 
         tk.Entry(output_frame, textvariable=self.output_path_var, bg="#000", fg=self.FG,
                  insertbackground=self.FG, relief="flat", font=font_main)\
@@ -109,10 +112,37 @@ class ROMOrganizerApp:
             .pack(side="right")
 
         
+        options_frame = tk.Frame(self.root, bg=self.BG)
+        options_frame.pack(fill="x", pady=(0, 15))
+
+        self.chk_extract = tk.Checkbutton(
+            options_frame, 
+            text="Keep original archives (.zip, .7z) after extraction", 
+            variable=self.keep_extract_var,
+            bg=self.BG, fg=self.FG, font=font_small,
+            selectcolor="#000000",         
+            activebackground=self.BG,       
+            activeforeground=self.FG        
+        )
+        self.chk_extract.pack(anchor="w") 
+
+        self.chk_compress = tk.Checkbutton(
+            options_frame, 
+            text="Keep original uncompressed ROMs (.iso, .bin) after compression", 
+            variable=self.keep_compress_var,
+            bg=self.BG, fg=self.FG, font=font_small,
+            selectcolor="#000000", 
+            activebackground=self.BG, 
+            activeforeground=self.FG
+        )
+        self.chk_compress.pack(anchor="w")
+        
+
+        
         tk.Button(self.root, text=">>> START <<<", bg="#001a12", fg=self.FG,
                   font=("Courier New", 12, "bold"), relief="flat",
                   command=self.start_process)\
-            .pack(pady=20, ipadx=10, ipady=10)
+            .pack(pady=10, ipadx=10, ipady=10) 
 
     def browse_input(self):
         folder = filedialog.askdirectory()
@@ -128,6 +158,9 @@ class ROMOrganizerApp:
         input_dir = self.input_path_var.get()
         output_dir = self.output_path_var.get()
 
+        keep_extract = self.keep_extract_var.get()
+        keep_compress = self.keep_compress_var.get()
+
         if not input_dir or not output_dir:
             tk.messagebox.showwarning("Missing Folders", "Select both folders.")
             return
@@ -142,7 +175,7 @@ class ROMOrganizerApp:
 
         threading.Thread(
             target=self.run_backend_script,
-            args=(input_dir, output_dir),
+            args=(input_dir, output_dir,keep_extract,keep_compress),
             daemon=True
         ).start()
 
@@ -184,7 +217,7 @@ class ROMOrganizerApp:
         logger.addHandler(text_handler)
 
      
-    def run_backend_script(self, input_dir, output_dir):
+    def run_backend_script(self, input_dir, output_dir,keep_extract,keep_compress):
         try:
             logging.info("BOOTING ROM ORGANIZER...")
 
@@ -204,16 +237,17 @@ class ROMOrganizerApp:
                 copy_list = files_type_dict['to_extract'].copy()
                 files_type_dict['to_extract'].clear()
                 extracted_list.clear()
-                extractor.get_archive_files(copy_list, tempDir, extracted_list)
+                extractor.get_archive_files(copy_list, tempDir, extracted_list,keep_extract)
                 classifier.classify_files(extracted_list, files_type_dict, valid_suffix_dict)
 
             os.chdir(output_dir)
             logging.info("Output directory set.")
 
             processor.create_folders()
+            #got to check if the user doesn't have folder already created for its consoles
             processor.processor(files_type_dict, tempDir, suffix_size_dict, console_tag_serial_dict)
 
-            compressor.compressor()
+            compressor.compressor(keep_compress)
             cleaner.clean_empty(Path())
 
             logging.info(">>> COMPLETE <<<")

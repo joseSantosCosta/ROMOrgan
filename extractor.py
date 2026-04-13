@@ -4,7 +4,7 @@ import logging
 import patoolib
 from patoolib.util import PatoolError
 
-def get_archive_files(to_extract_f:list,extracted_dir:dir,extracted:list) -> None:
+def get_archive_files(to_extract_f:list,extracted_dir:dir,extracted:list,to_keep:bool) -> None:
     """
     This function receives a list of zip archives, a temp dir and a list of extracted files,
     extracts the content of each zip file and deletes it after being extracted
@@ -19,9 +19,9 @@ def get_archive_files(to_extract_f:list,extracted_dir:dir,extracted:list) -> Non
         try:
             patoolib.extract_archive(str(archive.absolute()),verbosity=-2,interactive = False,outdir=str(path_extracted_dir.absolute()))
             logging.info(f"Extracted {archive.name}")
-
-            logging.info(f"Deleting {archive.name}, the content was already extracted")
-            archive.unlink(missing_ok=True)
+            if to_keep == False:
+                logging.info(f"Deleting {archive.name}")
+                archive.unlink(missing_ok=True)
         except PatoolError as e:
             logging.error(f"Failed to extract {archive.name}: {e}")
             print(f"Error extracting {archive.name}. Skipping deletion.")
