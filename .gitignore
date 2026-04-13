@@ -9,6 +9,7 @@ databases/
 create_json.py
 __pycache__/
 tools/
+todo.txt
 
 # Python junk
 __pycache__/
