@@ -5,7 +5,9 @@ import re
 import logging
 import json
 import hashlib
-
+from twoWayDict import twoWayDict
+import rename
+import os
 #This module will receive a dictionary from the classifier.classify_files() function 
 BASE_DIR = Path(__file__).parent.absolute()
 
@@ -279,7 +281,92 @@ console_dict = {
     "AppleII": ["AppleII", "Apple II", "Apple 2"],
 }
 
-def create_folders() -> None:
+CONSOLE_ALIASES = {
+    # --- Nintendo ---
+    "NES": ["NES", "Nintendo Entertainment System", "Famicom", "Nintendo"],
+    "SNES": ["SNES", "Super Nintendo", "Super Famicom", "Super Nintendo Entertainment System", "SFC"],
+    "N64": ["N64", "Nintendo 64"],
+    "GB": ["GB", "Game Boy", "Gameboy", "Nintendo Game Boy"],
+    "GBC": ["GBC", "Game Boy Color", "Gameboy Color"],
+    "GBA": ["GBA", "Game Boy Advance", "Gameboy Advance"],
+    "NDS": ["NDS", "DS", "Nintendo DS"],
+    "3DS": ["3DS", "Nintendo 3DS"],
+    "VB": ["VB", "Virtual Boy", "Nintendo Virtual Boy"],
+    "POKEMINI": ["Pokemon Mini", "PokeMini"],
+    "SWITCH": ["SWITCH", "Nintendo Switch", "NS"],
+    "GC": ["GC", "GameCube", "Game Cube", "Nintendo GameCube", "GCN"],
+    "WII": ["WII", "Wii", "Nintendo Wii"],
+    "WIIU": ["WIIU", "Wii U", "Nintendo Wii U"],
+
+    # --- Sony ---
+    "PS1": ["PS1", "PSX", "PlayStation", "PlayStation 1", "Sony PlayStation"],
+    "PS2": ["PS2", "PlayStation 2", "Sony PlayStation 2"],
+    "PS3": ["PS3", "PlayStation 3", "Sony PlayStation 3"],
+    "PS4": ["PS4", "PlayStation 4", "Sony PlayStation 4"],
+    "PSP": ["PSP", "PlayStation Portable", "Sony PSP"],
+    "VITA": ["VITA", "PS Vita", "PlayStation Vita", "PSVita"],
+
+    # --- Sega ---
+    "SG1000": ["SG1000", "SG-1000", "Sega SG-1000"],
+    "SMS": ["SMS", "Master System", "Sega Master System"],
+    "GENESIS": ["GENESIS", "Mega Drive", "Sega Genesis", "Sega Mega Drive", "Megadrive"],
+    "32X": ["32X", "Sega 32X", "Sega Genesis 32X"],
+    "SegaCD": ["SegaCD", "Sega CD", "Mega CD", "Sega Mega-CD"],
+    "Saturn": ["Saturn", "Sega Saturn"],
+    "DC": ["DC", "Dreamcast", "Sega Dreamcast"],
+    "GG": ["GG", "Game Gear", "Sega Game Gear"],
+
+    # --- Microsoft ---
+    "XBOX": ["XBOX", "Xbox", "Microsoft Xbox", "Original Xbox"],
+    "X360": ["X360", "Xbox 360", "Microsoft Xbox 360"],
+
+    # --- Atari ---
+    "A2600": ["A2600", "Atari 2600", "VCS"],
+    "A5200": ["A5200", "Atari 5200"],
+    "A7800": ["A7800", "Atari 7800"],
+    "LYNX": ["LYNX", "Atari Lynx", "Lynx"],
+    "JAG": ["JAG", "Atari Jaguar", "Jaguar"],
+
+    # --- NEC / TurboGrafx ---
+    "PCE": ["PCE", "PC Engine", "TurboGrafx-16", "TG16", "TurboGrafx"],
+    "PCECD": ["PCECD", "PC Engine CD", "TurboGrafx-CD", "TGCD", "TurboGrafx CD"],
+
+    # --- SNK / Neo Geo ---
+    "NEOGEO": ["NEOGEO", "Neo Geo", "Neo-Geo MVS", "Neo-Geo AES", "NeoGeo AES"],
+    "NGP": ["NGP", "Neo Geo Pocket", "NGPC", "Neo Geo Pocket Color"],
+
+    # --- Microcomputers & Others ---
+    "3DO": ["3DO", "Panasonic 3DO", "3DO Interactive Multiplayer"],
+    "WS": ["WS", "WonderSwan", "Bandai WonderSwan", "WSC", "WonderSwan Color"],
+    "INTV": ["INTV", "Intellivision", "Mattel Intellivision"],
+    "COLECO": ["COLECO", "ColecoVision", "Coleco"],
+    "VEC": ["VEC", "Vectrex"],
+    "AMIGA": ["AMIGA", "Commodore Amiga", "Amiga 500"],
+    "C64": ["C64", "Commodore 64", "C-64"],
+    "ZXS": ["ZXS", "ZX Spectrum", "Sinclair ZX Spectrum"],
+    "MSX": ["MSX", "Microsoft MSX"],
+    "CPC": ["CPC", "Amstrad CPC"],
+    "AppleII": ["AppleII", "Apple II", "Apple 2"],
+}
+
+console_aliases = twoWayDict(CONSOLE_ALIASES) #this dictionary works both ways
+
+
+
+def check_existing_directories(roms_dir:Path)->list:
+    """
+    It will scan all the directories inside the directory given (ideally it would be the user ROMs directory)
+
+    Returns a list of directories that already exists in the user library
+    """
+    logging.info("Checking the console folder you already have...")
+    new_to_old:dict = rename.change_dir_name(roms_dir)
+    already_existing_dir = [folder.name for folder in roms_dir.glob('*') if folder.is_dir()]
+    rename.original_dir_name(roms_dir,new_to_old)
+    return already_existing_dir
+     
+
+def create_folders(create_from_scratch:bool,create_remaining:bool,roms_dir:Path) -> None: #this will create folders if the user is creating his first library
     """
     This function will create the ROMs folder and the to_compress folder by looking at the console dict in order to see which consoles
     might have games that can be compressed and whichs don't
@@ -290,34 +377,74 @@ def create_folders() -> None:
 
     this function doesn't return anything
     """
-    logging.debug("Creating ROMs folder...")
-    ROMs_folder = Path() / "ROMs"
-    ROMs_folder.mkdir(exist_ok=True)
+    if create_from_scratch:
+        logging.info("Creating the library from scratch")
+        logging.debug("Creating ROMs folder...")
+        ROMs_folder = Path() / "ROMs"
+        ROMs_folder.mkdir(exist_ok=True)
     
-    logging.debug("Creating to_compress folder...")
-    to_compress_folder = Path() / "to_compress"
-    to_compress_folder.mkdir(exist_ok=True)
+        logging.info("Creating to_compress folder...")
+        to_compress_folder = Path() / "to_compress"
+        to_compress_folder.mkdir(exist_ok=True)
     
-    logging.debug("Creating unknown folder")
-    unknown_folder = Path() / "unknown"
-    unknown_folder.mkdir(exist_ok=True)
+        logging.info("Creating unknown folder")
+        unknown_folder = Path() / "unknown"
+        unknown_folder.mkdir(exist_ok=True)
     
-    logging.debug("Creating ambiguous folder")
-    ambiguous_folder = Path() / "ambiguous"
-    ambiguous_folder.mkdir(exist_ok=True)
+        logging.info("Creating ambiguous folder")
+        ambiguous_folder = Path() / "ambiguous"
+        ambiguous_folder.mkdir(exist_ok=True)
 
-    logging.debug("Creating ambiguous_to_compress folder")
-    ambiguous_to_compress_folder = Path() / "ambiguous_to_compress"
-    ambiguous_to_compress_folder.mkdir(exist_ok=True)
+        logging.info("Creating ambiguous_to_compress folder")
+        ambiguous_to_compress_folder = Path() / "ambiguous_to_compress"
+        ambiguous_to_compress_folder.mkdir(exist_ok=True)
 
-    for console,dir_flag in console_dict.items():
-        logging.debug(f"Creating ROMs/{console} subfolder")
-        dest = Path() / "ROMs" / f"{console}"
-        dest.mkdir(exist_ok=True)
-        if dir_flag[1] == True:
-            logging.debug(f"Creating to_compress/{console} folder")
-            dest = Path() / "to_compress" / f"{console}_to_compress"
+        for console,dir_flag in console_dict.items():
+            logging.info(f"Creating ROMs/{console} subfolder")
+            dest = Path() / "ROMs" / f"{console}"
             dest.mkdir(exist_ok=True)
+            if dir_flag[1] == True:
+                logging.info(f"Creating to_compress/{console} folder")
+                dest = Path() / "to_compress" / f"{console}_to_compress"
+                dest.mkdir(exist_ok=True)
+    else:
+        logging.info("Creating to_compress folder...")
+        to_compress_folder = Path() / "to_compress"
+        to_compress_folder.mkdir(exist_ok=True)
+    
+        logging.info("Creating unknown folder")
+        unknown_folder = Path() / "unknown"
+        unknown_folder.mkdir(exist_ok=True)
+    
+        logging.info("Creating ambiguous folder")
+        ambiguous_folder = Path() / "ambiguous"
+        ambiguous_folder.mkdir(exist_ok=True)
+
+        logging.info("Creating ambiguous_to_compress folder")
+        ambiguous_to_compress_folder = Path() / "ambiguous_to_compress"
+        ambiguous_to_compress_folder.mkdir(exist_ok=True)
+
+        if create_remaining: #if the user wants to create folders for consoles that he doesnt have yet
+            logging.info(f"Changing to the user ROMs directory: {roms_dir.absolute()}")
+            os.chdir(roms_dir)
+            existing_dir = check_existing_directories(roms_dir)
+            for console,dir_tag in console_dict.items():
+                if console not in existing_dir:
+                    new_dir = Path() / console
+                    logging.info(f"User doesnt have a {dir_tag[0]} folder, creating one")
+                    new_dir.mkdir(exist_ok=True)
+                    if dir_tag[1] == True:
+                        new_dir = Path() / f"{console}_to_compress"
+                        logging.info(f"Creating a {dir_tag[0]}_to_compress folder")
+                        new_dir.mkdir(exist_ok=True)
+    
+
+
+
+            
+
+
+
 
 def normalize_file_name(file: Path) -> str:
     """
@@ -468,7 +595,9 @@ def size_name_serial_heuristic(file:Path, size_dict:dict, console_tag_serial:dic
             
 
 def resolve_console(file:Path,suffix_size_dict,console_tag_serial:dict) -> str:
-    """Needs doc"""
+    """
+    Receives a path object of the game and returns to which console that game belongs to
+    """
     suffix = file.suffix
     if suffix not in extension_map:
         logging.debug(f"{file.name} assigned unkown")
@@ -480,11 +609,7 @@ def resolve_console(file:Path,suffix_size_dict,console_tag_serial:dict) -> str:
         result = size_name_serial_heuristic(file,suffix_size_dict,console_tag_serial)
         logging.debug(f"{file.name} assigned to {result}")
         return result
-
-def get_existing_console_folder(output_dir:Path,target_console):
-    return None
         
-
 
 def get_destination(console, to_compress=False):
     """Needs doc"""
