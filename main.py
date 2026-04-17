@@ -42,6 +42,7 @@ class GUIHandler(logging.Handler):
 
 
 def back_end(input_dir:Path,output_dir:Path,keep_extract:bool,keep_compress:bool,from_scratch:bool,adding:bool):
+    existing_folders = {f.name for f in output_dir.iterdir() if f.is_dir()}
     BASE_DIR = Path(__file__).parent.absolute()
     logging.info("BOOTING ROM ORGANIZER...")
     logging.info("Loading rules...")
@@ -71,7 +72,7 @@ def back_end(input_dir:Path,output_dir:Path,keep_extract:bool,keep_compress:bool
     processor.processor(files_type_dict, tempDir, suffix_size_dict, console_tag_serial_dict,output_dir,adding)
 
     compressor.compressor(keep_compress,adding)
-    cleaner.clean_empty(Path())
+    cleaner.clean_empty(output_dir,adding,existing_folders)
 
     logging.info(">>> COMPLETE <<<")
 
