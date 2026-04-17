@@ -35,7 +35,7 @@ def identify_console(directory:Path):
     return match
 
 
-def compressor(to_keep:bool):
+def compressor(to_keep:bool,adding:bool):
     input_dir = Path() / 'to_compress'
 
     for dir in input_dir.glob('*'):
@@ -68,7 +68,7 @@ def compressor(to_keep:bool):
 
             if result.returncode == 0:
                 logging.info(f"Sucess {output_file} created!")
-                dest = Path() / 'ROMs' / console
+                dest = Path() / 'ROMs' / console if adding == False else Path() / console
                 dest.mkdir(parents=True, exist_ok=True)
                 logging.info(f"Moving {str(output_file)} to {dest.absolute()}")
                 shutil.move(output_file,dest)

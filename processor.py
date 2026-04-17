@@ -212,75 +212,7 @@ extension_map = {
     ".zso": ["PSP", "PS2"],    # Zstandard Compressed ISO
 }
 
-# Formato: "INTERNAL_TAG": ["Alias 1", "Alias 2", "Nome Padrão"]
-console_dict = {
-    # --- Nintendo ---
-    "NES": ["NES", "Nintendo Entertainment System", "Nintendo"],
-    "SNES": ["SNES", "Super Nintendo", "Super Famicom", "Super Nintendo Entertainment System"],
-    "N64": ["N64", "Nintendo 64"],
-    "GB": ["GB", "Game Boy", "Gameboy", "Nintendo Game Boy"],
-    "GBC": ["GBC", "Game Boy Color", "Gameboy Color"],
-    "GBA": ["GBA", "Game Boy Advance", "Gameboy Advance"],
-    "NDS": ["NDS", "DS", "Nintendo DS"],
-    "3DS": ["3DS", "Nintendo 3DS"],
-    "VB": ["VB", "Virtual Boy", "Nintendo Virtual Boy"],
-    "POKEMINI": ["Pokemon Mini", "PokeMini"],
-    "SWITCH": ["SWITCH", "Nintendo Switch", "NS"],
-    "GC": ["GC", "GameCube", "Game Cube", "Nintendo GameCube", "GCN"],
-    "WII": ["WII", "Wii", "Nintendo Wii"],
-    "WIIU": ["WIIU", "Wii U", "Nintendo Wii U"],
-
-    # --- Sony ---
-    "PS1": ["PS1", "PSX", "PlayStation", "PlayStation 1", "Sony PlayStation"],
-    "PS2": ["PS2", "PlayStation 2", "Sony PlayStation 2", "PS2 ISO"],
-    "PS3": ["PS3", "PlayStation 3", "Sony PlayStation 3"],
-    "PS4": ["PS4", "PlayStation 4"],
-    "PSP": ["PSP", "PlayStation Portable", "Sony PSP"],
-    "VITA": ["VITA", "PS Vita", "PlayStation Vita"],
-
-    # --- Sega ---
-    "SG1000": ["SG1000", "SG-1000", "Sega SG-1000"],
-    "SMS": ["SMS", "Master System", "Sega Master System"],
-    "GENESIS": ["GENESIS", "Mega Drive", "Sega Genesis", "Sega Mega Drive", "Megadrive"],
-    "32X": ["32X", "Sega 32X", "Sega Genesis 32X"],
-    "SegaCD": ["SegaCD", "Sega CD", "Mega CD", "Sega Mega-CD"],
-    "Saturn": ["Saturn", "Sega Saturn"],
-    "DC": ["DC", "Dreamcast", "Sega Dreamcast"],
-    "GG": ["GG", "Game Gear", "Sega Game Gear"],
-
-    # --- Microsoft ---
-    "XBOX": ["XBOX", "Xbox", "Microsoft Xbox", "Original Xbox"],
-    "X360": ["X360", "Xbox 360", "Microsoft Xbox 360"],
-
-    # --- Atari ---
-    "A2600": ["A2600", "Atari 2600", "VCS"],
-    "A5200": ["A5200", "Atari 5200"],
-    "A7800": ["A7800", "Atari 7800"],
-    "LYNX": ["LYNX", "Atari Lynx", "Lynx"],
-    "JAG": ["JAG", "Atari Jaguar", "Jaguar"],
-
-    # --- NEC / TurboGrafx ---
-    "PCE": ["PCE", "PC Engine", "TurboGrafx-16", "TG16"],
-    "PCECD": ["PCECD", "PC Engine CD", "TurboGrafx-CD", "TGCD"],
-
-    # --- SNK / Neo Geo ---
-    "NEOGEO": ["NEOGEO", "Neo Geo", "Neo-Geo MVS", "Neo-Geo AES"],
-    "NGP": ["NGP", "Neo Geo Pocket", "NGPC", "Neo Geo Pocket Color"],
-
-    # --- Microcomputers & Others ---
-    "3DO": ["3DO", "Panasonic 3DO", "3DO Interactive Multiplayer"],
-    "WS": ["WS", "WonderSwan", "Bandai WonderSwan", "WSC", "WonderSwan Color"],
-    "INTV": ["INTV", "Intellivision", "Mattel Intellivision"],
-    "COLECO": ["COLECO", "ColecoVision", "Coleco"],
-    "VEC": ["VEC", "Vectrex"],
-    "AMIGA": ["AMIGA", "Commodore Amiga", "Amiga 500"],
-    "C64": ["C64", "Commodore 64", "C-64"],
-    "ZXS": ["ZXS", "ZX Spectrum", "Sinclair ZX Spectrum"],
-    "MSX": ["MSX", "Microsoft MSX"],
-    "CPC": ["CPC", "Amstrad CPC"],
-    "AppleII": ["AppleII", "Apple II", "Apple 2"],
-}
-
+# Format: "INTERNAL_TAG": ["Alias 1", "Alias 2"]
 CONSOLE_ALIASES = {
     # --- Nintendo ---
     "NES": ["NES", "Nintendo Entertainment System", "Famicom", "Nintendo"],
@@ -366,7 +298,7 @@ def check_existing_directories(roms_dir:Path)->list:
     return already_existing_dir
      
 
-def create_folders(create_from_scratch:bool,create_remaining:bool,roms_dir:Path) -> None: #this will create folders if the user is creating his first library
+def create_folders(create_from_scratch:bool,adding:bool,output_dir:Path) -> None: #this will create folders if the user is creating his first library
     """
     This function will create the ROMs folder and the to_compress folder by looking at the console dict in order to see which consoles
     might have games that can be compressed and whichs don't
@@ -380,63 +312,52 @@ def create_folders(create_from_scratch:bool,create_remaining:bool,roms_dir:Path)
     if create_from_scratch:
         logging.info("Creating the library from scratch")
         logging.debug("Creating ROMs folder...")
-        ROMs_folder = Path() / "ROMs"
+        ROMs_folder = output_dir / "ROMs"
         ROMs_folder.mkdir(exist_ok=True)
     
         logging.info("Creating to_compress folder...")
-        to_compress_folder = Path() / "to_compress"
+        to_compress_folder = output_dir / "to_compress"
         to_compress_folder.mkdir(exist_ok=True)
     
         logging.info("Creating unknown folder")
-        unknown_folder = Path() / "unknown"
+        unknown_folder = output_dir / "unknown"
         unknown_folder.mkdir(exist_ok=True)
     
         logging.info("Creating ambiguous folder")
-        ambiguous_folder = Path() / "ambiguous"
+        ambiguous_folder = output_dir / "ambiguous"
         ambiguous_folder.mkdir(exist_ok=True)
 
         logging.info("Creating ambiguous_to_compress folder")
-        ambiguous_to_compress_folder = Path() / "ambiguous_to_compress"
+        ambiguous_to_compress_folder = output_dir / "ambiguous_to_compress"
         ambiguous_to_compress_folder.mkdir(exist_ok=True)
 
         for console,dir_flag in console_dict.items():
             logging.info(f"Creating ROMs/{console} subfolder")
-            dest = Path() / "ROMs" / f"{console}"
+            dest = output_dir / "ROMs" / f"{console}"
             dest.mkdir(exist_ok=True)
             if dir_flag[1] == True:
                 logging.info(f"Creating to_compress/{console} folder")
-                dest = Path() / "to_compress" / f"{console}_to_compress"
+                dest = output_dir / "to_compress" / f"{console}_to_compress"
                 dest.mkdir(exist_ok=True)
-    else:
+    elif adding:
+        logging.info(f"Changing to the user ROMs directory: {output_dir.absolute()}")
+        os.chdir(output_dir)
+
         logging.info("Creating to_compress folder...")
-        to_compress_folder = Path() / "to_compress"
+        to_compress_folder = output_dir / "to_compress"
         to_compress_folder.mkdir(exist_ok=True)
     
         logging.info("Creating unknown folder")
-        unknown_folder = Path() / "unknown"
+        unknown_folder = output_dir / "unknown"
         unknown_folder.mkdir(exist_ok=True)
     
         logging.info("Creating ambiguous folder")
-        ambiguous_folder = Path() / "ambiguous"
+        ambiguous_folder = output_dir / "ambiguous"
         ambiguous_folder.mkdir(exist_ok=True)
 
         logging.info("Creating ambiguous_to_compress folder")
-        ambiguous_to_compress_folder = Path() / "ambiguous_to_compress"
+        ambiguous_to_compress_folder = output_dir / "ambiguous_to_compress"
         ambiguous_to_compress_folder.mkdir(exist_ok=True)
-
-        if create_remaining: #if the user wants to create folders for consoles that he doesnt have yet
-            logging.info(f"Changing to the user ROMs directory: {roms_dir.absolute()}")
-            os.chdir(roms_dir)
-            existing_dir = check_existing_directories(roms_dir)
-            for console,dir_tag in console_dict.items():
-                if console not in existing_dir:
-                    new_dir = Path() / console
-                    logging.info(f"User doesnt have a {dir_tag[0]} folder, creating one")
-                    new_dir.mkdir(exist_ok=True)
-                    if dir_tag[1] == True:
-                        new_dir = Path() / f"{console}_to_compress"
-                        logging.info(f"Creating a {dir_tag[0]}_to_compress folder")
-                        new_dir.mkdir(exist_ok=True)
     
 
 
@@ -611,21 +532,22 @@ def resolve_console(file:Path,suffix_size_dict,console_tag_serial:dict) -> str:
         return result
         
 
-def get_destination(console, to_compress=False):
+def get_destination(console,adding:bool,output_dir:Path,to_compress=False,):
     """Needs doc"""
     if console in ('unknown', None):
-        return Path() / 'unknown'
+        return output_dir / 'unknown'
 
     if console == 'ambiguous':
-        return Path() / ('ambiguous_to_compress' if to_compress else 'ambiguous')
+        return output_dir / ('ambiguous_to_compress' if to_compress else 'ambiguous')
 
     if to_compress:
-        return Path() / 'to_compress' / f"{console}_to_compress"
+        return output_dir / 'to_compress' / f"{console}_to_compress"
+    
+    roms_base = output_dir if adding else output_dir / 'ROMs'
+    return roms_base
 
-    return Path() / 'ROMs' / console
 
-
-def processor(file_types: dict, tempDir: tempfile,suffix_size_dict:dict,console_tag_serial:dict):
+def processor(file_types: dict, tempDir: tempfile,suffix_size_dict:dict,console_tag_serial:dict,output_dir:Path,adding:bool):
     """
     This function receives a dictionary for the type of file, a temporary Directory and a dictionary with the file sizes of each extension
     console combination
@@ -637,7 +559,7 @@ def processor(file_types: dict, tempDir: tempfile,suffix_size_dict:dict,console_
 
     This function will also delete the temporary directory used to store the extracted game files
     """    
-
+    logging.info(f"Processor called — adding={adding}, output_dir={output_dir}")
     with tempDir as tempDir:
 
         for type, files in file_types.items():
@@ -646,13 +568,13 @@ def processor(file_types: dict, tempDir: tempfile,suffix_size_dict:dict,console_
                 for file in files:
                     console= resolve_console(file,suffix_size_dict,console_tag_serial)
                     if type == 'to_compress':
-                        dest = get_destination(console,to_compress=True)
+                        dest = get_destination(console,adding,output_dir,to_compress=True)
                         dest.mkdir(parents=True,exist_ok=True)
                         if file.exists():
                             shutil.move(file,dest)
                             logging.debug(f"Moved {file.name} to {dest.name}")
                     elif type == 'not_to_compress':
-                        dest = get_destination(console,to_compress=False)
+                        dest = get_destination(console,adding,output_dir,to_compress=False)
                         dest.mkdir(parents=True,exist_ok=True)
                         if file.exists():
                             shutil.move(file,dest)

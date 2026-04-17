@@ -41,7 +41,7 @@ class GUIHandler(logging.Handler):
 
 
 
-def back_end(input_dir:Path,output_dir:Path,keep_extract:bool,keep_compress:bool,from_scratch:bool,missing_folders:bool):
+def back_end(input_dir:Path,output_dir:Path,keep_extract:bool,keep_compress:bool,from_scratch:bool,adding:bool):
     BASE_DIR = Path(__file__).parent.absolute()
     logging.info("BOOTING ROM ORGANIZER...")
     logging.info("Loading rules...")
@@ -66,11 +66,11 @@ def back_end(input_dir:Path,output_dir:Path,keep_extract:bool,keep_compress:bool
     os.chdir(output_dir)
     logging.info("Output directory set.")
 
-    processor.create_folders(from_scratch,missing_folders,output_dir)
+    processor.create_folders(from_scratch,adding,output_dir)
         
-    processor.processor(files_type_dict, tempDir, suffix_size_dict, console_tag_serial_dict)
+    processor.processor(files_type_dict, tempDir, suffix_size_dict, console_tag_serial_dict,output_dir,adding)
 
-    compressor.compressor(keep_compress)
+    compressor.compressor(keep_compress,adding)
     cleaner.clean_empty(Path())
 
     logging.info(">>> COMPLETE <<<")
@@ -79,39 +79,66 @@ input_dir:Path = None
 output_dir:Path = None
 
 #Creating the UI
-window = GUI_creator.create_window()
+window = GUI_creator.create_first_window()
+
+
 
 #setting the logger
 gui_handler = GUIHandler(window,"-CONSOLE OUTPUT-")
 gui_handler.setFormatter(logging.Formatter('[%(levelname)s] %(message)s'))
 logging.getLogger().addHandler(gui_handler)
+from_scratch = False
+adding = False
 
 
 thread = None
 while True:
-    events,values = window.read(timeout=100)
-    if events == sg.WIN_CLOSED or events == '-ABORT BUTTON-':
+    events, values = window.read(timeout=100)
+
+    if events == sg.WIN_CLOSED:
         break
+
+    elif events == '-FROM SCRATCH-':
+        from_scratch = True
+        window.close()
+        window = GUI_creator.create_add_window()
+        gui_handler.window = window
+        
+
+    elif events == '-ADD GAMES-':
+        adding = True
+        window.close()
+        window = GUI_creator.create_add_window(adding=True)
+        gui_handler.window = window
+
+
+    elif events == '-ABORT BUTTON-':
+        if thread and thread.is_alive():
+            pass  
+        else:
+            break 
+
     elif events == '-START_BUTTON-':
         keep_extract = values['-KEEP_EXTRACT-']
         keep_compress = values['-KEEP_COMPRESS-']
-        from_scratch = values['-FROM SCRATCH-']
-        missing_folders = values['-MISSING FOLDERS-']
         input_dir = Path(values['-INPUT_FOLDER-'])
         output_dir = Path(values['-OUTPUT_FOLDER-'])
         thread = threading.Thread(
-            target = back_end,
-            args = (input_dir,output_dir,keep_extract,keep_compress,from_scratch,missing_folders),
+            target=back_end,
+            args=(input_dir, output_dir, keep_extract, keep_compress, from_scratch, adding),
             daemon=True
         )
         thread.start()
+
     elif events == "-CONSOLE OUTPUT-":
         window["-CONSOLE OUTPUT-"].print(values['-CONSOLE OUTPUT-'])
+
     
-    elif thread and thread.is_alive() == False:
+    if thread and not thread.is_alive():
         window['-ABORT BUTTON-'].update("EXIT")
         thread = None
 
+            # force full exit
 
 
 
