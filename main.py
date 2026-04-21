@@ -37,7 +37,19 @@ class GUIHandler(logging.Handler):
 
 
 
+#possible conventions
+#[esde,full,mansys,retroarch,alphabeticalsub,regionsub]
+# esde - ES-DE front end convention which is basically ROMs/console
+# full name - also ROMs/console, but the console folders are named like Gameboy Advance instead of gba
+# mansys - the games are organized as manufacture/system, so something like ROMs/Nintendo/gba
+# retroarch - similar to the ES-DE convention but with some differences in naming e.g. ROMs/nintendo - gameboy advance
+#alphabeticalsub - the ROMs are organized per console, but the games are in subfolder based on the letter the name starts with 
+#regionsub - same as the alphabetical, but divided into region the games are from (USA,EU....)
+# maybe this last two can be subflags
 
+#so possible conventions would be [esde,full,mansys,retroarch] and possible sub [alphabetical,region]
+
+#so we can pass this in a variable like (convention,sub) where sub could be alphabetical or region 
 
 
 

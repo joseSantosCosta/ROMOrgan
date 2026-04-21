@@ -18,7 +18,7 @@ def create_first_window():
         [sg.Text(text='What you want to do?', size=(20, 1))],
         button_layout
     ]
-    return sg.Window('ROMorgan',layout,finalize=True)
+    return sg.Window('ROMorgan',layout,finalize=True,icon='icon.ico')
 
 def create_add_window(adding=False):
     if adding == False:
@@ -26,7 +26,23 @@ def create_add_window(adding=False):
             [sg.Text('Choose the folder where the games you want to add are')],
             [sg.Text('Games to add'),sg.Input(key='-INPUT_FOLDER-',disabled=True),sg.FolderBrowse()],
             [sg.Text('Choose the place where you want to create your new ROMs library')],
-            [sg.Text('New ROMs library path'),sg.Input(key='-OUTPUT_FOLDER-',disabled=True),sg.FolderBrowse()]
+            [sg.Text('New ROMs library path'),sg.Input(key='-OUTPUT_FOLDER-',disabled=True),sg.FolderBrowse()],
+            [sg.Text('Select the organizing convention for your library'),sg.Combo(
+                values=['ES-DE','RetroArch','Full name','Manufacture/System'],
+                key='-CONVENTION-',
+                enable_events=True,
+                default_value='ES-DE',
+                readonly=True
+                )
+                ],
+            [sg.Text('Create subfolders for each folder?'),sg.Combo(
+                values=['','Alphabetical','Region'],
+                key='-SUBFOLDERS-',
+                enable_events=True,
+                default_value='',
+                readonly=True
+                )
+                ]
         ]
     else:
         input_output_layout = [
@@ -45,7 +61,6 @@ def create_add_window(adding=False):
     ]
 
     consoleside_layout = [
-        [sg.ProgressBar(max_value=100)],
         [sg.Multiline(key = '-CONSOLE OUTPUT-',autoscroll=True,disabled=True,size=(50,20))],
         [sg.Button(button_text='ABORT',key='-ABORT BUTTON-')]
     ]
@@ -58,7 +73,7 @@ def create_add_window(adding=False):
 
         ]
     ]
-    return sg.Window('ROMorgan',layout,finalize=True)
+    return sg.Window('ROMorgan',layout,finalize=True,icon='icon.ico')
 
 if __name__ == '__main__':
     window = create_first_window()

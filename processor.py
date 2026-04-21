@@ -13,70 +13,70 @@ BASE_DIR = Path(__file__).parent.absolute()
 
 console_dict = {
     # --- Nintendo ---
-    "NES": ("NES", False),
-    "SNES": ("SNES", False),
-    "N64": ("N64", False),
-    "GB": ("Game Boy", False),
-    "GBC": ("Game Boy Color", False),
-    "GBA": ("Game Boy Advance", False),
-    "NDS": ("Nintendo DS", False),
-    "3DS": ("Nintendo 3DS", False),
-    "VB": ("Virtual Boy", False),
-    "POKEMINI": ("Pokemon Mini", False),
-    "SWITCH": ("Nintendo Switch", False), # Switch games use XCI/NSP, no need for CHD
-    "GC": ("GameCube", True),             # Compresses to .rvz
-    "WII": ("Wii", True),                 # Compresses to .rvz
-    "WIIU": ("Wii U", True),              # Compresses to .wua
+    "NES": ("nes", False),
+    "SNES": ("snes", False),
+    "N64": ("n64", False),
+    "GB": ("gb", False),
+    "GBC": ("gbc", False),
+    "GBA": ("gba", False),
+    "NDS": ("nds", False),
+    "3DS": ("3ds", False),
+    "VB": ("virtualboy", False),
+    "POKEMINI": ("pokemini", False),
+    "SWITCH": ("switch", False),
+    "GC": ("gc", True),
+    "WII": ("wii", True),
+    "WIIU": ("wiiu", True),
 
     # --- Sony ---
-    "PS1": ("PlayStation 1", True),       # Compresses to .chd
-    "PS2": ("PlayStation 2", True),       # Compresses to .chd
-    "PS3": ("PlayStation 3", True),       # Can be ISO compressed
-    "PS4": ("PlayStation 4", False),      # Uses PKG
-    "PSP": ("PSP", True),                 # Compresses to .cso or .chd
-    "VITA": ("PS Vita", False),           # Uses VPK/MaiDump
+    "PS1": ("psx", True),
+    "PS2": ("ps2", True),
+    "PS3": ("ps3", True),
+    "PS4": ("ps4", False),
+    "PSP": ("psp", True),
+    "VITA": ("psvita", False),
 
     # --- Sega ---
-    "SG1000": ("SG-1000", False),
-    "SMS": ("Master System", False),
-    "GENESIS": ("Genesis", False),
-    "32X": ("32X", False),
-    "SegaCD": ("Sega CD", True),          # Compresses to .chd
-    "Saturn": ("Saturn", True),           # Compresses to .chd
-    "DC": ("Dreamcast", True),            # Compresses to .chd
-    "GG": ("Game Gear", False),
+    "SG1000": ("sg1000", False),
+    "SMS": ("mastersystem", False),
+    "GENESIS": ("megadrive", False),
+    "32X": ("sega32x", False),
+    "SegaCD": ("segacd", True),
+    "Saturn": ("saturn", True),
+    "DC": ("dreamcast", True),
+    "GG": ("gamegear", False),
 
     # --- Microsoft ---
-    "XBOX": ("Xbox", True),               # Compresses to .ciso or ISO
-    "X360": ("Xbox 360", True),           # Uses ISO
+    "XBOX": ("xbox", True),
+    "X360": ("xbox360", True),
 
     # --- Atari ---
-    "A2600": ("Atari 2600", False),
-    "A5200": ("Atari 5200", False),
-    "A7800": ("Atari 7800", False),
-    "LYNX": ("Atari Lynx", False),
-    "JAG": ("Atari Jaguar", False),       # Base Jaguar is cart, Jaguar CD would be True
+    "A2600": ("atari2600", False),
+    "A5200": ("atari5200", False),
+    "A7800": ("atari7800", False),
+    "LYNX": ("atarilynx", False),
+    "JAG": ("atarijaguar", False),
 
     # --- NEC / TurboGrafx ---
-    "PCE": ("PC Engine", False),
-    "PCECD": ("PC Engine CD", True),      # Compresses to .chd
+    "PCE": ("tg16", False),
+    "PCECD": ("tg-cd", True),
 
     # --- SNK / Neo Geo ---
-    "NEOGEO": ("Neo Geo", False),
-    "NGP": ("Neo Geo Pocket", False),
+    "NEOGEO": ("neogeo", False),
+    "NGP": ("ngp", False),
 
     # --- Microcomputers & Others ---
-    "3DO": ("3DO", True),                 # Compresses to .chd
-    "WS": ("WonderSwan", False),
-    "INTV": ("Intellivision", False),
-    "COLECO": ("ColecoVision", False),
-    "VEC": ("Vectrex", False),
-    "AMIGA": ("Commodore Amiga", False),  # Mostly floppies (.adf) or LHA archives
-    "C64": ("Commodore 64", False),
-    "ZXS": ("ZX Spectrum", False),
-    "MSX": ("MSX", False),
-    "CPC": ("Amstrad CPC", False),
-    "AppleII": ("Apple II", False),
+    "3DO": ("3do", True),
+    "WS": ("wonderswan", False),
+    "INTV": ("intellivision", False),
+    "COLECO": ("colecovision", False),
+    "VEC": ("vectrex", False),
+    "AMIGA": ("amiga", False),
+    "C64": ("c64", False),
+    "ZXS": ("zxspectrum", False),
+    "MSX": ("msx", False),
+    "CPC": ("amstradcpc", False),
+    "AppleII": ("apple2", False),
 }
 
 extension_map = {
