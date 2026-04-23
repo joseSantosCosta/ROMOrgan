@@ -13,272 +13,272 @@ BASE_DIR = Path(__file__).parent.absolute()
 
 console_dict = {
     # --- Nintendo ---
-    "NES": ("nes", False),
-    "SNES": ("snes", False),
-    "N64": ("n64", False),
-    "GB": ("gb", False),
-    "GBC": ("gbc", False),
-    "GBA": ("gba", False),
-    "NDS": ("nds", False),
-    "3DS": ("3ds", False),
-    "VB": ("virtualboy", False),
-    "POKEMINI": ("pokemini", False),
-    "SWITCH": ("switch", False),
-    "GC": ("gc", True),
-    "WII": ("wii", True),
-    "WIIU": ("wiiu", True),
+    "nes": ("nes", False),
+    "snes": ("snes", False),
+    "n64": ("n64", False),
+    "gb": ("gb", False),
+    "gbc": ("gbc", False),
+    "gba": ("gba", False),
+    "nds": ("nds", False),
+    "3ds": ("3ds", False),
+    "virtualboy": ("virtualboy", False),
+    "pokemini": ("pokemini", False),
+    "switch": ("switch", False),
+    "gc": ("gc", True),
+    "wii": ("wii", True),
+    "wiiu": ("wiiu", True),
 
     # --- Sony ---
-    "PS1": ("psx", True),
-    "PS2": ("ps2", True),
-    "PS3": ("ps3", True),
-    "PS4": ("ps4", False),
-    "PSP": ("psp", True),
-    "VITA": ("psvita", False),
+    "psx": ("psx", True),
+    "ps2": ("ps2", True),
+    "ps3": ("ps3", True),
+    "ps4": ("ps4", False),
+    "psp": ("psp", True),
+    "psvita": ("psvita", False),
 
     # --- Sega ---
-    "SG1000": ("sg1000", False),
-    "SMS": ("mastersystem", False),
-    "GENESIS": ("megadrive", False),
-    "32X": ("sega32x", False),
-    "SegaCD": ("segacd", True),
-    "Saturn": ("saturn", True),
-    "DC": ("dreamcast", True),
-    "GG": ("gamegear", False),
+    "sg1000": ("sg1000", False),
+    "mastersystem": ("mastersystem", False),
+    "megadrive": ("megadrive", False),
+    "sega32x": ("sega32x", False),
+    "segacd": ("segacd", True),
+    "saturn": ("saturn", True),
+    "dreamcast": ("dreamcast", True),
+    "gamegear": ("gamegear", False),
 
     # --- Microsoft ---
-    "XBOX": ("xbox", True),
-    "X360": ("xbox360", True),
+    "xbox": ("xbox", True),
+    "xbox360": ("xbox360", True),
 
     # --- Atari ---
-    "A2600": ("atari2600", False),
-    "A5200": ("atari5200", False),
-    "A7800": ("atari7800", False),
-    "LYNX": ("atarilynx", False),
-    "JAG": ("atarijaguar", False),
+    "atari2600": ("atari2600", False),
+    "atari5200": ("atari5200", False),
+    "atari7800": ("atari7800", False),
+    "atarilynx": ("atarilynx", False),
+    "atarijaguar": ("atarijaguar", False),
 
     # --- NEC / TurboGrafx ---
-    "PCE": ("tg16", False),
-    "PCECD": ("tg-cd", True),
+    "tg16": ("tg16", False),
+    "tg-cd": ("tg-cd", True),
 
     # --- SNK / Neo Geo ---
-    "NEOGEO": ("neogeo", False),
-    "NGP": ("ngp", False),
+    "neogeo": ("neogeo", False),
+    "ngp": ("ngp", False),
 
     # --- Microcomputers & Others ---
-    "3DO": ("3do", True),
-    "WS": ("wonderswan", False),
-    "INTV": ("intellivision", False),
-    "COLECO": ("colecovision", False),
-    "VEC": ("vectrex", False),
-    "AMIGA": ("amiga", False),
-    "C64": ("c64", False),
-    "ZXS": ("zxspectrum", False),
-    "MSX": ("msx", False),
-    "CPC": ("amstradcpc", False),
-    "AppleII": ("apple2", False),
+    "3do": ("3do", True),
+    "wonderswan": ("wonderswan", False),
+    "intellivision": ("intellivision", False),
+    "colecovision": ("colecovision", False),
+    "vectrex": ("vectrex", False),
+    "amiga": ("amiga", False),
+    "c64": ("c64", False),
+    "zxspectrum": ("zxspectrum", False),
+    "msx": ("msx", False),
+    "amstradcpc": ("amstradcpc", False),
+    "apple2": ("apple2", False),
 }
 
 extension_map = {
     # --- A ---
-    ".a26": ["A2600"],         # Atari 2600
-    ".a52": ["A5200"],         # Atari 5200
-    ".a78": ["A7800"],         # Atari 7800
-    ".adf": ["AMIGA"],         # Amiga Disk File
-    ".app": ["WIIU"],          # Wii U
+    ".a26": ["atari2600"],         # Atari 2600
+    ".a52": ["atari5200"],         # Atari 5200
+    ".a78": ["atari7800"],         # Atari 7800
+    ".adf": ["amiga"],             # Amiga Disk File
+    ".app": ["wiiu"],              # Wii U
 
     # --- B ---
-    ".bin": ["PS1", "PS2", "Saturn", "SegaCD", "GENESIS", "A2600", "PCECD", "INTV"], 
+    ".bin": ["psx", "ps2", "saturn", "segacd", "megadrive", "atari2600", "tg-cd", "intellivision"], 
     
     # --- C ---
-    ".ccd": ["PS1", "Saturn"], # CloneCD (Often paired with .img/.sub)
-    ".cdi": ["DC"],            # Dreamcast (DiscJuggler)
-    ".cdt": ["CPC"],           # Amstrad CPC Tape
-    ".chd": ["PS1", "PS2", "Saturn", "SegaCD", "DC", "PCECD", "3DO"], # Compressed Hunks of Data
-    ".cia": ["3DS"],           # Nintendo 3DS
-    ".ciso": ["GC", "WII"],    # Compact ISO
-    ".col": ["COLECO"],        # ColecoVision
-    ".crt": ["C64"],           # Commodore 64 Cartridge
-    ".cso": ["PSP"],           # Compressed ISO
-    ".cue": ["PS1", "Saturn", "SegaCD", "PCECD", "3DO"], # Cue sheet for optical media
-    ".cxi": ["3DS"],           # 3DS executable
+    ".ccd": ["psx", "saturn"],     # CloneCD (Often paired with .img/.sub)
+    ".cdi": ["dreamcast"],         # Dreamcast (DiscJuggler)
+    ".cdt": ["amstradcpc"],        # Amstrad CPC Tape
+    ".chd": ["psx", "ps2", "saturn", "segacd", "dreamcast", "tg-cd", "3do"], # Compressed Hunks of Data
+    ".cia": ["3ds"],               # Nintendo 3DS
+    ".ciso": ["gc", "wii"],        # Compact ISO
+    ".col": ["colecovision"],      # ColecoVision
+    ".crt": ["c64"],               # Commodore 64 Cartridge
+    ".cso": ["psp"],               # Compressed ISO
+    ".cue": ["psx", "saturn", "segacd", "tg-cd", "3do"], # Cue sheet for optical media
+    ".cxi": ["3ds"],               # 3DS executable
 
     # --- D ---
-    ".d64": ["C64"],           # Commodore 64 Disk
-    ".dsi": ["NDS"],           # Nintendo DSi
-    ".dsk": ["CPC", "MSX", "AppleII"], # Generic Disk image
+    ".d64": ["c64"],               # Commodore 64 Disk
+    ".dsi": ["nds"],               # Nintendo DSi
+    ".dsk": ["amstradcpc", "msx", "apple2"], # Generic Disk image
 
     # --- F ---
-    ".fds": ["NES"],           # Famicom Disk System
-    ".fig": ["SNES"],          # Super Famicom
+    ".fds": ["nes"],               # Famicom Disk System
+    ".fig": ["snes"],              # Super Famicom
 
     # --- G ---
-    ".gb": ["GB"],             # Game Boy
-    ".gba": ["GBA"],           # Game Boy Advance
-    ".gbc": ["GBC"],           # Game Boy Color
-    ".gcm": ["GC"],            # GameCube Master
-    ".gdi": ["DC"],            # Dreamcast (Gigabyte Disc)
-    ".gen": ["GENESIS"],       # Sega Genesis
-    ".gg": ["GG"],             # Sega Game Gear
+    ".gb": ["gb"],                 # Game Boy
+    ".gba": ["gba"],               # Game Boy Advance
+    ".gbc": ["gbc"],               # Game Boy Color
+    ".gcm": ["gc"],                # GameCube Master
+    ".gdi": ["dreamcast"],         # Dreamcast (Gigabyte Disc)
+    ".gen": ["megadrive"],         # Sega Genesis
+    ".gg": ["gamegear"],           # Sega Game Gear
 
     # --- H ---
-    ".hdf": ["AMIGA"],         # Amiga Hard Disk
+    ".hdf": ["amiga"],             # Amiga Hard Disk
 
     # --- I ---
-    ".img": ["PS1", "PS2"],    # CloneCD Image or generic floppy
-    ".int": ["INTV"],          # Intellivision
-    ".ipf": ["AMIGA"],         # Amiga Interchange Format
-    ".iso": ["PS1", "PS2", "PS3", "PSP", "GC", "WII", "Saturn", "XBOX", "X360"],
+    ".img": ["psx", "ps2"],        # CloneCD Image or generic floppy
+    ".int": ["intellivision"],     # Intellivision
+    ".ipf": ["amiga"],             # Amiga Interchange Format
+    ".iso": ["psx", "ps2", "ps3", "psp", "gc", "wii", "saturn", "xbox", "xbox360"],
 
     # --- J ---
-    ".j64": ["JAG"],           # Atari Jaguar
-    ".jag": ["JAG"],           # Atari Jaguar
+    ".j64": ["atarijaguar"],       # Atari Jaguar
+    ".jag": ["atarijaguar"],       # Atari Jaguar
 
     # --- L ---
-    ".lnx": ["LYNX"],          # Atari Lynx
+    ".lnx": ["atarilynx"],         # Atari Lynx
 
     # --- M ---
-    ".m3u": ["PS1", "Saturn", "SegaCD", "DC"], # Playlist file for multi-disc games
-    ".mai": ["VITA"],          # PS Vita MaiDump
-    ".md": ["GENESIS"],        # Sega Mega Drive
-    ".mdf": ["PS1", "PS2"],    # Alcohol 120% Image
-    ".mds": ["PS1", "PS2"],    # Alcohol 120% Info
-    ".min": ["POKEMINI"],      # Pokemon Mini
+    ".m3u": ["psx", "saturn", "segacd", "dreamcast"], # Playlist file for multi-disc games
+    ".mai": ["psvita"],            # PS Vita MaiDump
+    ".md": ["megadrive"],          # Sega Mega Drive
+    ".mdf": ["psx", "ps2"],        # Alcohol 120% Image
+    ".mds": ["psx", "ps2"],        # Alcohol 120% Info
+    ".min": ["pokemini"],          # Pokemon Mini
 
     # --- N ---
-    ".n64": ["N64"],           # Nintendo 64
-    ".nca": ["SWITCH"],        # Nintendo Switch
-    ".ndd": ["N64"],           # Nintendo 64DD
-    ".nds": ["NDS"],           # Nintendo DS
-    ".neo": ["NEOGEO"],        # Neo Geo
-    ".nes": ["NES"],           # Nintendo Entertainment System
-    ".ngc": ["NGP"],           # Neo Geo Pocket Color
-    ".ngp": ["NGP"],           # Neo Geo Pocket
-    ".nsp": ["SWITCH"],        # Nintendo Switch Package
+    ".n64": ["n64"],               # Nintendo 64
+    ".nca": ["switch"],            # Nintendo Switch
+    ".ndd": ["n64"],               # Nintendo 64DD
+    ".nds": ["nds"],               # Nintendo DS
+    ".neo": ["neogeo"],            # Neo Geo
+    ".nes": ["nes"],               # Nintendo Entertainment System
+    ".ngc": ["ngpc"],              # Neo Geo Pocket Color
+    ".ngp": ["ngp"],               # Neo Geo Pocket
+    ".nsp": ["switch"],            # Nintendo Switch Package
 
     # --- P ---
-    ".pbp": ["PS1", "PSP"],    # PlayStation Portable Eboot
-    ".pce": ["PCE"],           # TurboGrafx-16 / PC Engine
-    ".pkg": ["PS3", "VITA"],   # PlayStation Package
-    ".prg": ["C64"],           # Commodore 64 Program
-    ".pup": ["PS3", "PS4"],    # PlayStation Update File
+    ".pbp": ["psx", "psp"],        # PlayStation Portable Eboot
+    ".pce": ["tg16"],              # TurboGrafx-16 / PC Engine
+    ".pkg": ["ps3", "psvita"],     # PlayStation Package
+    ".prg": ["c64"],               # Commodore 64 Program
+    ".pup": ["ps3", "ps4"],        # PlayStation Update File
 
     # --- R ---
-    ".rvz": ["GC", "WII"],     # Dolphin Emulator Compressed Image
+    ".rvz": ["gc", "wii"],         # Dolphin Emulator Compressed Image
 
     # --- S ---
-    ".sbi": ["PS1"],           # PS1 Subchannel Data (European games)
-    ".sfc": ["SNES"],          # Super Famicom
-    ".sg": ["SMS"],            # SG-1000
-    ".sgb": ["GB"],            # Super Game Boy
-    ".smc": ["SNES"],          # Super Magic Drive (SNES)
-    ".smd": ["GENESIS"],       # Super Magic Drive (Genesis)
-    ".sms": ["SMS"],           # Sega Master System
-    ".sna": ["ZXS"],           # ZX Spectrum Snapshot
-    ".sub": ["PS1", "Saturn"], # CloneCD Subchannel data
-    ".swc": ["SNES"],          # Super Wild Card (SNES)
+    ".sbi": ["psx"],               # PS1 Subchannel Data (European games)
+    ".sfc": ["snes"],              # Super Famicom
+    ".sg": ["sg1000"],             # SG-1000
+    ".sgb": ["gb"],                # Super Game Boy
+    ".smc": ["snes"],              # Super Magic Drive (SNES)
+    ".smd": ["megadrive"],         # Super Magic Drive (Genesis)
+    ".sms": ["mastersystem"],      # Sega Master System
+    ".sna": ["zxspectrum"],        # ZX Spectrum Snapshot
+    ".sub": ["psx", "saturn"],     # CloneCD Subchannel data
+    ".swc": ["snes"],              # Super Wild Card (SNES)
 
     # --- T ---
-    ".t64": ["C64"],           # Commodore 64 Tape
-    ".tap": ["C64", "ZXS"],    # Tape Image
-    ".toc": ["PS1", "Saturn"], # Table of Contents (usually with .bin)
-    ".tzx": ["ZXS"],           # ZX Spectrum Tape
+    ".t64": ["c64"],               # Commodore 64 Tape
+    ".tap": ["c64", "zxspectrum"], # Tape Image
+    ".toc": ["psx", "saturn"],     # Table of Contents (usually with .bin)
+    ".tzx": ["zxspectrum"],        # ZX Spectrum Tape
 
     # --- U ---
-    ".unf": ["NES"],           # UNIF NES ROM
+    ".unf": ["nes"],               # UNIF NES ROM
 
     # --- V ---
-    ".v64": ["N64"],           # Nintendo 64 (Doctor V64)
-    ".vb": ["VB"],             # Virtual Boy
-    ".vec": ["VEC"],           # Vectrex
-    ".vpk": ["VITA"],          # PS Vita Package
+    ".v64": ["n64"],               # Nintendo 64 (Doctor V64)
+    ".vb": ["virtualboy"],         # Virtual Boy
+    ".vec": ["vectrex"],           # Vectrex
+    ".vpk": ["psvita"],            # PS Vita Package
 
     # --- W ---
-    ".wad": ["WII"],           # Wii Channel File
-    ".wbfs": ["WII"],          # Wii Backup File System
-    ".ws": ["WS"],             # WonderSwan
-    ".wsc": ["WS"],            # WonderSwan Color
-    ".wua": ["WIIU"],          # Wii U Archive
-    ".wud": ["WIIU"],          # Wii U Disc Image
-    ".wux": ["WIIU"],          # Wii U Compressed Disc Image
+    ".wad": ["wii"],               # Wii Channel File
+    ".wbfs": ["wii"],              # Wii Backup File System
+    ".ws": ["wonderswan"],         # WonderSwan
+    ".wsc": ["wonderswancolor"],   # WonderSwan Color
+    ".wua": ["wiiu"],              # Wii U Archive
+    ".wud": ["wiiu"],              # Wii U Disc Image
+    ".wux": ["wiiu"],              # Wii U Compressed Disc Image
 
     # --- X ---
-    ".xci": ["SWITCH"],        # Switch Cartridge Image
-    ".xiso": ["XBOX"],         # Xbox ISO
+    ".xci": ["switch"],            # Switch Cartridge Image
+    ".xiso": ["xbox"],             # Xbox ISO
 
     # --- Z ---
-    ".z64": ["N64"],           # Nintendo 64 (Z64 format)
-    ".z80": ["ZXS"],           # ZX Spectrum Z80 Snapshot
-    ".zso": ["PSP", "PS2"],    # Zstandard Compressed ISO
+    ".z64": ["n64"],               # Nintendo 64 (Z64 format)
+    ".z80": ["zxspectrum"],        # ZX Spectrum Z80 Snapshot
+    ".zso": ["psp", "ps2"],        # Zstandard Compressed ISO
 }
 
 # Format: "INTERNAL_TAG": ["Alias 1", "Alias 2"]
 CONSOLE_ALIASES = {
     # --- Nintendo ---
-    "NES": ["NES", "Nintendo Entertainment System", "Famicom", "Nintendo"],
-    "SNES": ["SNES", "Super Nintendo", "Super Famicom", "Super Nintendo Entertainment System", "SFC"],
-    "N64": ["N64", "Nintendo 64"],
-    "GB": ["GB", "Game Boy", "Gameboy", "Nintendo Game Boy"],
-    "GBC": ["GBC", "Game Boy Color", "Gameboy Color"],
-    "GBA": ["GBA", "Game Boy Advance", "Gameboy Advance"],
-    "NDS": ["NDS", "DS", "Nintendo DS"],
-    "3DS": ["3DS", "Nintendo 3DS"],
-    "VB": ["VB", "Virtual Boy", "Nintendo Virtual Boy"],
-    "POKEMINI": ["Pokemon Mini", "PokeMini"],
-    "SWITCH": ["SWITCH", "Nintendo Switch", "NS"],
-    "GC": ["GC", "GameCube", "Game Cube", "Nintendo GameCube", "GCN"],
-    "WII": ["WII", "Wii", "Nintendo Wii"],
-    "WIIU": ["WIIU", "Wii U", "Nintendo Wii U"],
+    "nes": ["NES", "Nintendo Entertainment System", "Famicom", "Nintendo"],
+    "snes": ["SNES", "Super Nintendo", "Super Famicom", "Super Nintendo Entertainment System", "SFC"],
+    "n64": ["N64", "Nintendo 64"],
+    "gb": ["GB", "Game Boy", "Gameboy", "Nintendo Game Boy"],
+    "gbc": ["GBC", "Game Boy Color", "Gameboy Color"],
+    "gba": ["GBA", "Game Boy Advance", "Gameboy Advance"],
+    "nds": ["NDS", "DS", "Nintendo DS"],
+    "3ds": ["3DS", "Nintendo 3DS"],
+    "virtualboy": ["VB", "Virtual Boy", "Nintendo Virtual Boy"],
+    "pokemini": ["Pokemon Mini", "PokeMini"],
+    "switch": ["SWITCH", "Nintendo Switch", "NS"],
+    "gc": ["GC", "GameCube", "Game Cube", "Nintendo GameCube", "GCN"],
+    "wii": ["WII", "Wii", "Nintendo Wii"],
+    "wiiu": ["WIIU", "Wii U", "Nintendo Wii U"],
 
     # --- Sony ---
-    "PS1": ["PS1", "PSX", "PlayStation", "PlayStation 1", "Sony PlayStation"],
-    "PS2": ["PS2", "PlayStation 2", "Sony PlayStation 2"],
-    "PS3": ["PS3", "PlayStation 3", "Sony PlayStation 3"],
-    "PS4": ["PS4", "PlayStation 4", "Sony PlayStation 4"],
-    "PSP": ["PSP", "PlayStation Portable", "Sony PSP"],
-    "VITA": ["VITA", "PS Vita", "PlayStation Vita", "PSVita"],
+    "psx": ["PS1", "PSX", "PlayStation", "PlayStation 1", "Sony PlayStation"],
+    "ps2": ["PS2", "PlayStation 2", "Sony PlayStation 2"],
+    "ps3": ["PS3", "PlayStation 3", "Sony PlayStation 3"],
+    "ps4": ["PS4", "PlayStation 4", "Sony PlayStation 4"],
+    "psp": ["PSP", "PlayStation Portable", "Sony PSP"],
+    "psvita": ["VITA", "PS Vita", "PlayStation Vita", "PSVita"],
 
     # --- Sega ---
-    "SG1000": ["SG1000", "SG-1000", "Sega SG-1000"],
-    "SMS": ["SMS", "Master System", "Sega Master System"],
-    "GENESIS": ["GENESIS", "Mega Drive", "Sega Genesis", "Sega Mega Drive", "Megadrive"],
-    "32X": ["32X", "Sega 32X", "Sega Genesis 32X"],
-    "SegaCD": ["SegaCD", "Sega CD", "Mega CD", "Sega Mega-CD"],
-    "Saturn": ["Saturn", "Sega Saturn"],
-    "DC": ["DC", "Dreamcast", "Sega Dreamcast"],
-    "GG": ["GG", "Game Gear", "Sega Game Gear"],
+    "sg1000": ["SG1000", "SG-1000", "Sega SG-1000"],
+    "mastersystem": ["SMS", "Master System", "Sega Master System"],
+    "megadrive": ["GENESIS", "Mega Drive", "Sega Genesis", "Sega Mega Drive", "Megadrive"],
+    "sega32x": ["32X", "Sega 32X", "Sega Genesis 32X"],
+    "segacd": ["SegaCD", "Sega CD", "Mega CD", "Sega Mega-CD"],
+    "saturn": ["Saturn", "Sega Saturn"],
+    "dreamcast": ["DC", "Dreamcast", "Sega Dreamcast"],
+    "gamegear": ["GG", "Game Gear", "Sega Game Gear"],
 
     # --- Microsoft ---
-    "XBOX": ["XBOX", "Xbox", "Microsoft Xbox", "Original Xbox"],
-    "X360": ["X360", "Xbox 360", "Microsoft Xbox 360"],
+    "xbox": ["XBOX", "Xbox", "Microsoft Xbox", "Original Xbox"],
+    "xbox360": ["X360", "Xbox 360", "Microsoft Xbox 360"],
 
     # --- Atari ---
-    "A2600": ["A2600", "Atari 2600", "VCS"],
-    "A5200": ["A5200", "Atari 5200"],
-    "A7800": ["A7800", "Atari 7800"],
-    "LYNX": ["LYNX", "Atari Lynx", "Lynx"],
-    "JAG": ["JAG", "Atari Jaguar", "Jaguar"],
+    "atari2600": ["A2600", "Atari 2600", "VCS"],
+    "atari5200": ["A5200", "Atari 5200"],
+    "atari7800": ["A7800", "Atari 7800"],
+    "atarilynx": ["LYNX", "Atari Lynx", "Lynx"],
+    "atarijaguar": ["JAG", "Atari Jaguar", "Jaguar"],
 
     # --- NEC / TurboGrafx ---
-    "PCE": ["PCE", "PC Engine", "TurboGrafx-16", "TG16", "TurboGrafx"],
-    "PCECD": ["PCECD", "PC Engine CD", "TurboGrafx-CD", "TGCD", "TurboGrafx CD"],
+    "tg16": ["PCE", "PC Engine", "TurboGrafx-16", "TG16", "TurboGrafx"],
+    "tg-cd": ["PCECD", "PC Engine CD", "TurboGrafx-CD", "TGCD", "TurboGrafx CD"],
 
     # --- SNK / Neo Geo ---
-    "NEOGEO": ["NEOGEO", "Neo Geo", "Neo-Geo MVS", "Neo-Geo AES", "NeoGeo AES"],
-    "NGP": ["NGP", "Neo Geo Pocket", "NGPC", "Neo Geo Pocket Color"],
+    "neogeo": ["NEOGEO", "Neo Geo", "Neo-Geo MVS", "Neo-Geo AES", "NeoGeo AES"],
+    "ngp": ["NGP", "Neo Geo Pocket", "NGPC", "Neo Geo Pocket Color"],
 
     # --- Microcomputers & Others ---
-    "3DO": ["3DO", "Panasonic 3DO", "3DO Interactive Multiplayer"],
-    "WS": ["WS", "WonderSwan", "Bandai WonderSwan", "WSC", "WonderSwan Color"],
-    "INTV": ["INTV", "Intellivision", "Mattel Intellivision"],
-    "COLECO": ["COLECO", "ColecoVision", "Coleco"],
-    "VEC": ["VEC", "Vectrex"],
-    "AMIGA": ["AMIGA", "Commodore Amiga", "Amiga 500"],
-    "C64": ["C64", "Commodore 64", "C-64"],
-    "ZXS": ["ZXS", "ZX Spectrum", "Sinclair ZX Spectrum"],
-    "MSX": ["MSX", "Microsoft MSX"],
-    "CPC": ["CPC", "Amstrad CPC"],
-    "AppleII": ["AppleII", "Apple II", "Apple 2"],
+    "3do": ["3DO", "Panasonic 3DO", "3DO Interactive Multiplayer"],
+    "wonderswan": ["WS", "WonderSwan", "Bandai WonderSwan", "WSC", "WonderSwan Color"],
+    "intellivision": ["INTV", "Intellivision", "Mattel Intellivision"],
+    "colecovision": ["COLECO", "ColecoVision", "Coleco"],
+    "vectrex": ["VEC", "Vectrex"],
+    "amiga": ["AMIGA", "Commodore Amiga", "Amiga 500"],
+    "c64": ["C64", "Commodore 64", "C-64"],
+    "zxspectrum": ["ZXS", "ZX Spectrum", "Sinclair ZX Spectrum"],
+    "msx": ["MSX", "Microsoft MSX"],
+    "amstradcpc": ["CPC", "Amstrad CPC"],
+    "apple2": ["AppleII", "Apple II", "Apple 2"],
 }
 
 console_aliases = twoWayDict(CONSOLE_ALIASES) #this dictionary works both ways
@@ -330,6 +330,9 @@ def create_folders(create_from_scratch:bool,adding:bool,output_dir:Path) -> None
         logging.info("Creating ambiguous_to_compress folder")
         ambiguous_to_compress_folder = output_dir / "ambiguous_to_compress"
         ambiguous_to_compress_folder.mkdir(exist_ok=True)
+
+        #if convention[0] == 'ES-DE':
+        #   convention_manager.create_folders_ESDE(output_dir)
 
         for console,dir_flag in console_dict.items():
             logging.info(f"Creating ROMs/{console} subfolder")
@@ -400,23 +403,21 @@ def deep_serial_scanner(filepath: Path, tied_consoles: list) -> str:
         
         sony_match = re.search(r'([A-Z]{4})[-_]?(\d{5})', header_text)
         if sony_match:
-            prefix = sony_match.group(1).lower() # e.g., 'ulus'
-            if prefix in ['ulus', 'ules', 'ucus', 'uces', 'npjh', 'npuh'] and 'PSP' in tied_consoles:
-                return 'PSP'
-            if prefix in ['slus', 'sles', 'scus', 'sces', 'slpm'] and 'PS2' in tied_consoles:
-                return 'PS2'
-            if prefix in ['slps'] and 'PS1' in tied_consoles:
-                return 'PS1'
+            prefix = sony_match.group(1).lower() 
+            if prefix in ['ulus', 'ules', 'ucus', 'uces', 'npjh', 'npuh'] and 'psp' in tied_consoles:
+                return 'psp'
+            if prefix in ['slus', 'sles', 'scus', 'sces', 'slpm'] and 'ps2' in tied_consoles:
+                return 'ps2'
+            if prefix in ['slps'] and 'psx' in tied_consoles: 
+                return 'psx'
 
         nintendo_match = re.search(r'([A-Z0-9]{4}[EJPX][A-Z0-9])\s*Nintendo', header_text, re.IGNORECASE)
         if nintendo_match:
             code = nintendo_match.group(1)
-            # Wii games usually start with R, S, or H
-            if code.startswith(('R', 'S', 'H')) and 'WII' in tied_consoles:
-                return 'WII'
-            # GameCube games usually start with G
-            if code.startswith('G') and 'GC' in tied_consoles:
-                return 'GC'
+            if code.startswith(('R', 'S', 'H')) and 'wii' in tied_consoles:
+                return 'wii'
+            if code.startswith('G') and 'gc' in tied_consoles:
+                return 'gc'
 
     except Exception as e:
         logging.error(f"Deep scan failed for {filepath.name}: {e}")

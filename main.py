@@ -13,6 +13,7 @@ import processor
 import compressor
 import cleaner
 import GUI_creator
+import get_tools
 
 logging.basicConfig(
     level=logging.INFO,
@@ -57,6 +58,11 @@ def back_end(input_dir:Path,output_dir:Path,keep_extract:bool,keep_compress:bool
     existing_folders = {f.name for f in output_dir.iterdir() if f.is_dir()}
     BASE_DIR = Path(__file__).parent.absolute()
     logging.info("BOOTING ROM ORGANIZER...")
+    logging.info("Checking if you have the necessary tools installed")
+    missing_tools = get_tools.check_tools()
+    logging.info(f"You have {len(missing_tools) if missing_tools else 0} missing tools")
+    get_tools.get_missing_tools(missing_tools)
+    os.chdir(BASE_DIR)
     logging.info("Loading rules...")
     files_type_dict = rules.create_file_types_dict()
     valid_suffix_dict = rules.create_valid_suffix_dict(BASE_DIR / 'valid_suffix.txt')

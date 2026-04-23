@@ -13,20 +13,20 @@ DOLPHIN_EXE = BASE_DIR / "tools" / "Dolphin-x64" / "DolphinTool.exe"
 
 compression_tools_dict = {
     # --- CHDMAN (.chd) ---
-    "PS1": {"tool": "chdman", "extension": ".chd"},
-    "PS2": {"tool": "chdman", "extension": ".chd"},
-    "SegaCD": {"tool": "chdman", "extension": ".chd"},
-    "Saturn": {"tool": "chdman", "extension": ".chd"},
-    "DC": {"tool": "chdman", "extension": ".chd"},
-    "PCECD": {"tool": "chdman", "extension": ".chd"},
-    "3DO": {"tool": "chdman", "extension": ".chd"},
+    "psx": {"tool": "chdman", "extension": ".chd"},
+    "ps2": {"tool": "chdman", "extension": ".chd"},
+    "segacd": {"tool": "chdman", "extension": ".chd"},
+    "saturn": {"tool": "chdman", "extension": ".chd"},
+    "dreamcast": {"tool": "chdman", "extension": ".chd"},
+    "tg-cd": {"tool": "chdman", "extension": ".chd"},
+    "3do": {"tool": "chdman", "extension": ".chd"},
 
     # --- DolphinTool (.rvz) ---
-    "GC": {"tool": "dolphintool", "extension": ".rvz"},
-    "WII": {"tool": "dolphintool", "extension": ".rvz"},
+    "gc": {"tool": "dolphintool", "extension": ".rvz"},
+    "wii": {"tool": "dolphintool", "extension": ".rvz"},
 
     # --- MaxCSO (.cso) ---
-    "PSP": {"tool": "maxcso", "extension": ".cso"},
+    "psp": {"tool": "maxcso", "extension": ".cso"},
 }
 
 def identify_console(directory:Path):
