@@ -1,18 +1,22 @@
 # ROMOrgan
 
-> **Work in Progress** — This project is actively under development. Features may be incomplete, change without notice, or behave unexpectedly. Contributions and feedback are welcome.
+> Work in progress. The core pipeline is fully functional and capable of building a clean, organized ROM library from scratch. Active development is now focused on adding support for existing libraries created by the user.
 
-An automated, intelligent Python pipeline with a native GUI designed to sort, extract, verify, and compress retro video game ROMs and disc images.
+An automated, intelligent Python pipeline with a native GUI to sort, extract, identify, and compress retro video game ROMs and disc images.
 
-Instead of manually sorting through terabytes of messy `.zip`, `.7z`, `.bin/.cue`, and `.iso` files, ROMOrgan uses a custom heuristic engine, database hash-matching, and deep boot-sector scanning to identify games, move them to the correct console folders, and automatically compress them into modern formats (`.chd`, `.cso`, `.rvz`) to save storage space.
+Instead of manually sorting through terabytes of messy `.zip`, `.7z`, `.bin/.cue`, and `.iso` files, ROMOrgan uses a custom heuristic engine, database hash-matching, and deep boot-sector scanning to perfectly identify games, move them to the correct console folders, and automatically compress them into modern formats (`.chd`, `.cso`, `.rvz`) — saving significant hard drive space.
 
 ---
 
-## How It Works
+## Features
 
-ROMOrgan runs your files through a multi-stage pipeline. The `classifier` first determines whether each file is a ROM, an archive to be extracted, or junk. Archives are unpacked into a temporary workspace and re-classified. The `processor` then identifies each game through a combination of file extension heuristics, deep serial scanning (reading the first 2MB of disc images to find internal codes like `SLUS-20001`), and MD5 hash matching against a local database. Once identified, files are moved to the correct console folder and optionally compressed using external tools (`chdman`, `maxcso`, `dolphintool`). A final cleanup pass removes any empty leftover folders.
-
-The pipeline is exposed through a native Tkinter GUI that lets you select input and output folders and watch a live log feed without the interface freezing.
+- **Native GUI** — A clean Tkinter interface to select input/output folders and watch live logs without freezing.
+- **Smart Extraction** — Automatically extracts archives (`.zip`, `.7z`, `.rar`, etc.) into a temporary workspace before processing.
+- **Advanced Heuristic Engine** — Routes games based on file extension, size thresholds, and naming conventions.
+- **Deep Serial Scanning** — Reads the first 2MB of `.iso` files to find hidden internal serial numbers (e.g., `SLUS-20001`, `NPJH-50443`) to perfectly identify ambiguous PS1, PS2, PSP, GameCube, and Wii games.
+- **Hash Verification** — Falls back to MD5 hashing against a local JSON database (`titles_db.json`) for exact title matches.
+- **Automated Compression** — Triggers external tools (`chdman`, `maxcso`, `dolphintool`) to compress heavy optical media into modern formats.
+- **Bulletproof Cleanup** — Reads inside `.cue` files to precisely delete leftover `.bin` tracks after successful compression, gracefully navigating Windows file locks.
 
 ---
 
@@ -20,80 +24,106 @@ The pipeline is exposed through a native Tkinter GUI that lets you select input 
 
 | File | Role |
 |---|---|
-| `main.py` | Entry point. Houses the GUI and orchestrates the full pipeline |
-| `rules.py` | Loads extension, size, and console tag dictionaries from `.txt` files |
-| `scanner.py` | Crawls the input directory to find all available files |
-| `classifier.py` | Determines if a file is a ROM, an archive, or trash |
-| `extractor.py` | Safely extracts archives into a temp directory for re-classification |
-| `processor.py` | Runs the Heuristic Engine, Serial Scanner, and Hash Matcher. Moves files to destination |
-| `compressor.py` | Spawns subprocesses to run `chdman`, `maxcso`, or `dolphintool` |
-| `cleaner.py` | Sweeps leftover empty folders at the end of the process |
+| `main.py` | Entry point. Sets up logging and orchestrates the full pipeline. |
+| `gui.py` | Tkinter GUI definition and event handling. |
+| `GUI_creator.py` | GUI component builder helpers. |
+| `rules.py` | Loads extension/size/console-tag dictionaries from `.txt` files. |
+| `scanner.py` | Crawls the input directory to find all available files. |
+| `classifier.py` | The brain — determines if a file is a ROM, an archive, or trash. |
+| `extractor.py` | Safely extracts archives into a temp directory and queues files for re-classification. |
+| `processor.py` | Runs the Heuristic Engine, Deep Serial Scanner, and Hash Matcher to identify the target console. Moves files to `ROMs/` or `to_compress/`. |
+| `compressor.py` | Spawns background subprocesses for `chdman`, `maxcso`, or `dolphintool`. Handles safe deletion of originals on success. |
+| `cleaner.py` | Sweeps the directory at the end to remove empty leftover folders. |
+| `twoWayDict.py` | Bidirectional dictionary utility used internally. |
+| `titles_db.json` | Local hash-to-title database for MD5 verification. |
+| `valid_suffix.txt` | Allowlist of valid ROM/disc file extensions. |
+| `suffix_sizes.txt` | Size thresholds per extension for heuristic routing. |
+| `console_tags_serials.txt` | Serial-number prefix-to-console mapping for deep scanning. |
 
 ---
 
 ## Prerequisites & Setup
 
-ROMOrgan requires **Python 3.8+** and uses only standard library modules, so no heavy dependencies are needed. The following rule files must be present in the same directory as `main.py`: `valid_suffix.txt`, `suffix_sizes.txt`, `console_tags_serials.txt`, and `titles_db.json`.
+### 1. Python Requirements
 
-For compression to work, external tools must be placed inside a `tools/` folder next to `main.py`:
+Requires **Python 3.8+**. The core pipeline uses only standard library modules:
+
+```
+tkinter, pathlib, subprocess, logging, hashlib, re, shutil
+```
+
+### 2. Required Data Files
+
+Ensure the following files are in the same directory as `main.py`:
+
+- `valid_suffix.txt`
+- `suffix_sizes.txt`
+- `console_tags_serials.txt`
+- `titles_db.json`
+
+### 3. External Tools
+
+The only tool you need to install manually is **[7-Zip](https://www.7-zip.org/)**, which is used for archive extraction. Install it normally on your system.
+
+All other compression tools (`chdman`, `maxcso`, `DolphinTool`) are downloaded automatically by the script if they are not found in the `tools/` directory. The expected folder layout is:
 
 ```
 Your_Project_Folder/
  ├── main.py
+ ├── gui.py
  ├── processor.py
  ├── ... (other .py and .txt files)
  └── tools/
-      ├── chdman.exe
-      ├── maxcso.exe
-      └── Dolphin-x64/
+      ├── chdman.exe          (PS1, PS2, Saturn, SegaCD, Dreamcast)
+      ├── maxcso.exe          (PSP)
+      └── Dolphin-x64/        (GameCube & Wii)
            ├── DolphinTool.exe
            ├── Qt6Core.dll
            └── Sys/
 ```
 
-Due to licensing, these tools are not bundled and must be downloaded separately. You will need [7-Zip](https://www.7-zip.org/) installed on your system, [UnRAR for Windows](https://www.rarlab.com/rar_add.htm) (`UnRar.exe` placed in `tools/`) for `.rar` support, [CHDMAN](https://www.mamedev.org/release.html) from the MAME release, [MaxCSO](https://github.com/unknownbrackets/maxcso/releases), and the [Dolphin Emulator](https://dolphin-emu.org/download/) x64 build with its folder renamed to `Dolphin-x64`.
-
 ---
 
 ## How to Use
 
-Download the latest ZIP from the [Releases](https://github.com/joseSantosCosta/ROMOrgan/releases) tab, extract it, place the external tools in the `tools/` folder, and run `ROMOrganizer.exe`. To run from source, simply execute `python main.py`.
+### Option A — Run from Source
 
-Once the application is open, select your input directory (the messy folder with your unorganized ROMs) and your output directory (ROMOrgan will create a `ROMs/` subfolder inside it automatically). Click **START ORGANIZING** and watch the live log.
+1. Ensure Python 3.8+ and 7-Zip are installed.
+2. Open a terminal in the project folder and run:
+   ```bash
+   python main.py
+   ```
 
----
+### Option B — Standalone App (`.exe`)
 
-## Supported Output Conventions
+1. Download the latest ZIP from the **[Releases](../../releases)** tab and extract it.
+2. Double-click **`ROMOrganizer.exe`** to launch.
 
-ROMOrgan can organize your library following the most common emulation frontend conventions. The default is ES-DE (e.g. `roms/gba/`), with additional support for full system names (`roms/Game Boy Advance/`), manufacturer/system hierarchy (`roms/Nintendo/Game Boy Advance/`), and the Libretro format (`roms/Nintendo - Game Boy Advance/`).
+### The Organizing Process
 
----
-
-## Roadmap
-
-- [x] Heuristic engine for ROM identification
-- [x] Deep serial scanning for disc-based games
-- [x] Hash-based verification via local database
-- [x] Automated compression (CHD, CSO, RVZ)
-- [ ] Existing library detection and convention matching
-- [ ] Region subfolder support (US, Japan, Europe, Translated, Hacks)
-- [ ] Alphabetical subfolder support for large libraries
-- [ ] Cross-platform support (Linux, macOS)
+1. **Input Directory** — Click *Browse* and select your source folder (e.g., a Downloads folder full of `.zip` files and `.iso` dumps).
+2. **Output Directory** — Click *Browse* and select your clean destination (e.g., an external drive or emulator frontend folder). The app creates a `ROMs/` subfolder automatically.
+3. **Start** — Click **START ORGANIZING**.
+4. **Watch the log** — The live feed shows exactly what the engine is doing: extracting archives, identifying serials, routing files, and running compression.
 
 ---
 
-## Supported Systems
+## Supported Compression Formats
 
-ROMOrgan currently supports identification and organization for consoles from Nintendo (NES, SNES, N64, Game Boy, Game Boy Color, Game Boy Advance, Nintendo DS, Nintendo 3DS, Virtual Boy, Pokemon Mini, GameCube, Wii, Wii U, Nintendo Switch), Sony (PlayStation 1–4, PSP, PS Vita), Sega (SG-1000, Master System, Genesis/Mega Drive, 32X, Sega CD, Saturn, Dreamcast, Game Gear), Microsoft (Xbox, Xbox 360), Atari (2600, 5200, 7800, Lynx, Jaguar), NEC (PC Engine/TurboGrafx-16, PC Engine CD), SNK (Neo Geo, Neo Geo Pocket), and others including 3DO, WonderSwan, Intellivision, ColecoVision, Vectrex, Commodore Amiga, Commodore 64, ZX Spectrum, MSX, Amstrad CPC, and Apple II.
+| Format | Tool | Systems |
+|---|---|---|
+| `.chd` | chdman | PS1, PS2, Saturn, SegaCD, Dreamcast |
+| `.cso` | maxcso | PSP |
+| `.rvz` | DolphinTool | GameCube, Wii |
 
 ---
 
 ## Contributing
 
-This project is in active development and contributions are very welcome. Feel free to open an issue or submit a pull request.
+Contributions, issues, and feature requests are welcome. Feel free to open an issue or submit a pull request.
 
 ---
 
-## License
+## Disclaimer
 
-This project is open source. See the [LICENSE](LICENSE) file for details.
+This tool is intended for use with legally owned ROM backups. The authors do not condone piracy. Always respect the intellectual property rights of game publishers.
