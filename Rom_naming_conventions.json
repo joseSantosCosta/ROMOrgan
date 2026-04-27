@@ -1,0 +1,370 @@
+{
+  "_meta": {
+    "description": "ROM library folder naming conventions for common emulation systems",
+    "conventions": {
+      "ES-DE": "ES-DE / RomM \u2014 short lowercase (e.g. gba, nes, psx)",
+      "Full name": "Full spelled-out system name (e.g. Game Boy Advance)",
+      "Manufacture/System": "Manufacturer/System path style used by Myrient (e.g. Nintendo/Game Boy Advance)",
+      "RetroArch": "Libretro/RetroArch playlist name style (e.g. Nintendo - Game Boy Advance)"
+    },
+    "fields": {
+      "ES-DE": "string",
+      "Full name": "string",
+      "Manufacture/System": "string",
+      "RetroArch": "string",
+      "disc_based": "boolean \u2014 true if content should not be zipped (CD/DVD images)"
+    }
+  },
+  "systems": {
+    "NES": {
+      "ES-DE": "nes",
+      "Full name": "Nintendo Entertainment System",
+      "Manufacture/System": "Nintendo/Nintendo Entertainment System",
+      "RetroArch": "Nintendo - Nintendo Entertainment System",
+      "disc_based": false
+    },
+    "SNES": {
+      "ES-DE": "snes",
+      "Full name": "Super Nintendo Entertainment System",
+      "Manufacture/System": "Nintendo/Super Nintendo Entertainment System",
+      "RetroArch": "Nintendo - Super Nintendo Entertainment System",
+      "disc_based": false
+    },
+    "N64": {
+      "ES-DE": "n64",
+      "Full name": "Nintendo 64",
+      "Manufacture/System": "Nintendo/Nintendo 64",
+      "RetroArch": "Nintendo - Nintendo 64",
+      "disc_based": false
+    },
+    "GB": {
+      "ES-DE": "gb",
+      "Full name": "Game Boy",
+      "Manufacture/System": "Nintendo/Game Boy",
+      "RetroArch": "Nintendo - Game Boy",
+      "disc_based": false
+    },
+    "GBC": {
+      "ES-DE": "gbc",
+      "Full name": "Game Boy Color",
+      "Manufacture/System": "Nintendo/Game Boy Color",
+      "RetroArch": "Nintendo - Game Boy Color",
+      "disc_based": false
+    },
+    "GBA": {
+      "ES-DE": "gba",
+      "Full name": "Game Boy Advance",
+      "Manufacture/System": "Nintendo/Game Boy Advance",
+      "RetroArch": "Nintendo - Game Boy Advance",
+      "disc_based": false
+    },
+    "NDS": {
+      "ES-DE": "nds",
+      "Full name": "Nintendo DS",
+      "Manufacture/System": "Nintendo/Nintendo DS",
+      "RetroArch": "Nintendo - Nintendo DS",
+      "disc_based": false
+    },
+    "3DS": {
+      "ES-DE": "3ds",
+      "Full name": "Nintendo 3DS",
+      "Manufacture/System": "Nintendo/Nintendo 3DS",
+      "RetroArch": "Nintendo - Nintendo 3DS",
+      "disc_based": false
+    },
+    "VB": {
+      "ES-DE": "virtualboy",
+      "Full name": "Virtual Boy",
+      "Manufacture/System": "Nintendo/Virtual Boy",
+      "RetroArch": "Nintendo - Virtual Boy",
+      "disc_based": false
+    },
+    "POKEMINI": {
+      "ES-DE": "pokemini",
+      "Full name": "Pokemon Mini",
+      "Manufacture/System": "Nintendo/Pokemon Mini",
+      "RetroArch": "Nintendo - Pokemon Mini",
+      "disc_based": false
+    },
+    "SWITCH": {
+      "ES-DE": "switch",
+      "Full name": "Nintendo Switch",
+      "Manufacture/System": "Nintendo/Nintendo Switch",
+      "RetroArch": "Nintendo - Nintendo Switch",
+      "disc_based": false
+    },
+    "GC": {
+      "ES-DE": "gc",
+      "Full name": "GameCube",
+      "Manufacture/System": "Nintendo/GameCube",
+      "RetroArch": "Nintendo - GameCube",
+      "disc_based": true
+    },
+    "WII": {
+      "ES-DE": "wii",
+      "Full name": "Wii",
+      "Manufacture/System": "Nintendo/Wii",
+      "RetroArch": "Nintendo - Wii",
+      "disc_based": true
+    },
+    "WIIU": {
+      "ES-DE": "wiiu",
+      "Full name": "Wii U",
+      "Manufacture/System": "Nintendo/Wii U",
+      "RetroArch": "Nintendo - Wii U",
+      "disc_based": true
+    },
+    "PS1": {
+      "ES-DE": "psx",
+      "Full name": "PlayStation",
+      "Manufacture/System": "Sony/PlayStation",
+      "RetroArch": "Sony - PlayStation",
+      "disc_based": true
+    },
+    "PS2": {
+      "ES-DE": "ps2",
+      "Full name": "PlayStation 2",
+      "Manufacture/System": "Sony/PlayStation 2",
+      "RetroArch": "Sony - PlayStation 2",
+      "disc_based": true
+    },
+    "PS3": {
+      "ES-DE": "ps3",
+      "Full name": "PlayStation 3",
+      "Manufacture/System": "Sony/PlayStation 3",
+      "RetroArch": "Sony - PlayStation 3",
+      "disc_based": true
+    },
+    "PS4": {
+      "ES-DE": "ps4",
+      "Full name": "PlayStation 4",
+      "Manufacture/System": "Sony/PlayStation 4",
+      "RetroArch": "Sony - PlayStation 4",
+      "disc_based": false
+    },
+    "PSP": {
+      "ES-DE": "psp",
+      "Full name": "PlayStation Portable",
+      "Manufacture/System": "Sony/PlayStation Portable",
+      "RetroArch": "Sony - PlayStation Portable",
+      "disc_based": true
+    },
+    "VITA": {
+      "ES-DE": "psvita",
+      "Full name": "PlayStation Vita",
+      "Manufacture/System": "Sony/PlayStation Vita",
+      "RetroArch": "Sony - PlayStation Vita",
+      "disc_based": false
+    },
+    "SG1000": {
+      "ES-DE": "sg1000",
+      "Full name": "SG-1000",
+      "Manufacture/System": "Sega/SG-1000",
+      "RetroArch": "Sega - SG-1000",
+      "disc_based": false
+    },
+    "SMS": {
+      "ES-DE": "mastersystem",
+      "Full name": "Master System",
+      "Manufacture/System": "Sega/Master System - Mark III",
+      "RetroArch": "Sega - Master System - Mark III",
+      "disc_based": false
+    },
+    "GENESIS": {
+      "ES-DE": "megadrive",
+      "Full name": "Mega Drive / Genesis",
+      "Manufacture/System": "Sega/Mega Drive - Genesis",
+      "RetroArch": "Sega - Mega Drive - Genesis",
+      "disc_based": false
+    },
+    "32X": {
+      "ES-DE": "sega32x",
+      "Full name": "Sega 32X",
+      "Manufacture/System": "Sega/32X",
+      "RetroArch": "Sega - 32X",
+      "disc_based": false
+    },
+    "SegaCD": {
+      "ES-DE": "segacd",
+      "Full name": "Sega CD / Mega-CD",
+      "Manufacture/System": "Sega/Mega-CD - Sega CD",
+      "RetroArch": "Sega - Mega-CD - Sega CD",
+      "disc_based": true
+    },
+    "Saturn": {
+      "ES-DE": "saturn",
+      "Full name": "Saturn",
+      "Manufacture/System": "Sega/Saturn",
+      "RetroArch": "Sega - Saturn",
+      "disc_based": true
+    },
+    "DC": {
+      "ES-DE": "dreamcast",
+      "Full name": "Dreamcast",
+      "Manufacture/System": "Sega/Dreamcast",
+      "RetroArch": "Sega - Dreamcast",
+      "disc_based": true
+    },
+    "GG": {
+      "ES-DE": "gamegear",
+      "Full name": "Game Gear",
+      "Manufacture/System": "Sega/Game Gear",
+      "RetroArch": "Sega - Game Gear",
+      "disc_based": false
+    },
+    "XBOX": {
+      "ES-DE": "xbox",
+      "Full name": "Xbox",
+      "Manufacture/System": "Microsoft/Xbox",
+      "RetroArch": "Microsoft - Xbox",
+      "disc_based": true
+    },
+    "X360": {
+      "ES-DE": "xbox360",
+      "Full name": "Xbox 360",
+      "Manufacture/System": "Microsoft/Xbox 360",
+      "RetroArch": "Microsoft - Xbox 360",
+      "disc_based": true
+    },
+    "A2600": {
+      "ES-DE": "atari2600",
+      "Full name": "Atari 2600",
+      "Manufacture/System": "Atari/Atari 2600",
+      "RetroArch": "Atari - 2600",
+      "disc_based": false
+    },
+    "A5200": {
+      "ES-DE": "atari5200",
+      "Full name": "Atari 5200",
+      "Manufacture/System": "Atari/Atari 5200",
+      "RetroArch": "Atari - 5200",
+      "disc_based": false
+    },
+    "A7800": {
+      "ES-DE": "atari7800",
+      "Full name": "Atari 7800",
+      "Manufacture/System": "Atari/Atari 7800",
+      "RetroArch": "Atari - 7800",
+      "disc_based": false
+    },
+    "LYNX": {
+      "ES-DE": "atarilynx",
+      "Full name": "Atari Lynx",
+      "Manufacture/System": "Atari/Atari Lynx",
+      "RetroArch": "Atari - Lynx",
+      "disc_based": false
+    },
+    "JAG": {
+      "ES-DE": "atarijaguar",
+      "Full name": "Atari Jaguar",
+      "Manufacture/System": "Atari/Atari Jaguar",
+      "RetroArch": "Atari - Jaguar",
+      "disc_based": false
+    },
+    "PCE": {
+      "ES-DE": "tg16",
+      "Full name": "TurboGrafx-16 / PC Engine",
+      "Manufacture/System": "NEC/TurboGrafx-16",
+      "RetroArch": "NEC - PC Engine - TurboGrafx 16",
+      "disc_based": false
+    },
+    "PCECD": {
+      "ES-DE": "tg-cd",
+      "Full name": "TurboGrafx-CD / PC Engine CD",
+      "Manufacture/System": "NEC/TurboGrafx-CD",
+      "RetroArch": "NEC - PC Engine CD - TurboGrafx-CD",
+      "disc_based": true
+    },
+    "NEOGEO": {
+      "ES-DE": "neogeo",
+      "Full name": "Neo Geo",
+      "Manufacture/System": "SNK/Neo Geo",
+      "RetroArch": "SNK - Neo Geo",
+      "disc_based": false
+    },
+    "NGP": {
+      "ES-DE": "ngp",
+      "Full name": "Neo Geo Pocket",
+      "Manufacture/System": "SNK/Neo Geo Pocket",
+      "RetroArch": "SNK - Neo Geo Pocket",
+      "disc_based": false
+    },
+    "3DO": {
+      "ES-DE": "3do",
+      "Full name": "3DO",
+      "Manufacture/System": "The 3DO Company/3DO",
+      "RetroArch": "The 3DO Company - 3DO",
+      "disc_based": true
+    },
+    "WS": {
+      "ES-DE": "wonderswan",
+      "Full name": "WonderSwan",
+      "Manufacture/System": "Bandai/WonderSwan",
+      "RetroArch": "Bandai - WonderSwan",
+      "disc_based": false
+    },
+    "INTV": {
+      "ES-DE": "intellivision",
+      "Full name": "Intellivision",
+      "Manufacture/System": "Mattel/Intellivision",
+      "RetroArch": "Mattel - Intellivision",
+      "disc_based": false
+    },
+    "COLECO": {
+      "ES-DE": "colecovision",
+      "Full name": "ColecoVision",
+      "Manufacture/System": "Coleco/ColecoVision",
+      "RetroArch": "Coleco - ColecoVision",
+      "disc_based": false
+    },
+    "VEC": {
+      "ES-DE": "vectrex",
+      "Full name": "Vectrex",
+      "Manufacture/System": "GCE/Vectrex",
+      "RetroArch": "GCE - Vectrex",
+      "disc_based": false
+    },
+    "AMIGA": {
+      "ES-DE": "amiga",
+      "Full name": "Amiga",
+      "Manufacture/System": "Commodore/Amiga",
+      "RetroArch": "Commodore - Amiga",
+      "disc_based": false
+    },
+    "C64": {
+      "ES-DE": "c64",
+      "Full name": "Commodore 64",
+      "Manufacture/System": "Commodore/Commodore 64",
+      "RetroArch": "Commodore - 64",
+      "disc_based": false
+    },
+    "ZXS": {
+      "ES-DE": "zxspectrum",
+      "Full name": "ZX Spectrum",
+      "Manufacture/System": "Sinclair/ZX Spectrum",
+      "RetroArch": "Sinclair - ZX Spectrum",
+      "disc_based": false
+    },
+    "MSX": {
+      "ES-DE": "msx",
+      "Full name": "MSX",
+      "Manufacture/System": "Microsoft/MSX",
+      "RetroArch": "Microsoft - MSX",
+      "disc_based": false
+    },
+    "CPC": {
+      "ES-DE": "amstradcpc",
+      "Full name": "Amstrad CPC",
+      "Manufacture/System": "Amstrad/CPC",
+      "RetroArch": "Amstrad - CPC",
+      "disc_based": false
+    },
+    "AppleII": {
+      "ES-DE": "apple2",
+      "Full name": "Apple II",
+      "Manufacture/System": "Apple/Apple II",
+      "RetroArch": "Apple - Apple II",
+      "disc_based": false
+    }
+  }
+}

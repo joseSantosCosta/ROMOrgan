@@ -56,7 +56,6 @@ def create_add_window(adding=False):
 
     checkboxes_layout = [
         [sg.Checkbox(text='Keep original archives after extraction?',key='-KEEP_EXTRACT-')],
-        [sg.Checkbox(text = 'Keep original files after compression?',key='-KEEP_COMPRESS-')],
         [sg.Button(button_text="START PROCESS",enable_events=True,key="-START_BUTTON-")]
     ]
 

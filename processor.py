@@ -281,7 +281,65 @@ CONSOLE_ALIASES = {
     "apple2": ["AppleII", "Apple II", "Apple 2"],
 }
 
+REGION_MAP = {
+    # --- The Big Three & Global ---
+    "USA": "USA",
+    "Japan": "Japan",
+    "Europe": "Europe",
+    "World": "World",
+
+    # --- Combined Regions (Prioritize the primary market) ---
+    "USA, Europe": "USA",
+    "Japan, USA": "Japan",
+    "Japan, Europe": "Japan",
+    "USA, Europe, Brazil": "USA",
+
+    # --- Asia & Oceania ---
+    "Asia": "Asia",
+    "Australia": "Australia",
+    "Korea": "Korea",
+    "China": "China",
+    "Taiwan": "Taiwan",
+    "Hong Kong": "Asia",
+
+    # --- Individual European Countries ---
+    "France": "Europe",
+    "Germany": "Europe",
+    "Italy": "Europe",
+    "Spain": "Europe",
+    "UK": "Europe",
+    "Netherlands": "Europe",
+    "Sweden": "Europe",
+    "Russia": "Europe",
+    "Scandinavia": "Europe",
+
+    # --- South America & Others ---
+    "Brazil": "Brazil",
+    "Canada": "USA", 
+    "Latin America": "Latin America"
+}
+
 console_aliases = twoWayDict(CONSOLE_ALIASES) #this dictionary works both ways
+
+
+def extract_region(filename, region_map):
+    """
+    Finds the region tag inside the parentheses of a ROM filename.
+    Returns the mapped region folder name, or 'Unknown' if not found.
+    """
+    match = re.search(r'\((.*?)\)', filename)
+    
+    if match:
+        raw_region = match.group(1) 
+        
+        if raw_region in region_map:
+            return region_map[raw_region]
+            
+        for key in region_map:
+            if key in raw_region:
+                return region_map[key]
+
+    return "Unknown Region"
 
 
 
@@ -297,8 +355,32 @@ def check_existing_directories(roms_dir:Path)->list:
     rename.original_dir_name(roms_dir,new_to_old)
     return already_existing_dir
      
+def create_folder_based_in_convention(convention:str,output_dir:Path,db:json):
+        for console in db:
+            if convention == "Manufacture/System":
+                if db[console]['disc_based'] == True:
+                    logging.info(f"Creating to_compress/{folder_name} folder")
+                    dest = output_dir / "to_compress" / f"{folder_name}_to_compress"
+                    dest.mkdir(parents=True,exist_ok=True)
+                folder_name:str = db[console][convention]
+                logging.info(f"Creating ROMs/{folder_name} subfolder")
+                manufacturer,system = folder_name.split("/")
+                dest = output_dir / "ROMs" / manufacturer / system
+                dest.mkdir(parents=True,exist_ok=True)
+            else:
+                if db[console]['disc_based'] == True:
+                    logging.info(f"Creating to_compress/{folder_name} folder")
+                    dest = output_dir / "to_compress" / f"{folder_name}_to_compress"
+                    dest.mkdir(exist_ok=True)
+                folder_name = db[console][convention]
+                logging.info(f"Creating ROMs/{folder_name} subfolder")
+                dest = output_dir / "ROMs" / folder_name
+                dest.mkdir(exist_ok=True)
+                
 
-def create_folders(create_from_scratch:bool,adding:bool,output_dir:Path) -> None: #this will create folders if the user is creating his first library
+                
+
+def create_folders(create_from_scratch:bool,adding:bool,output_dir:Path,convention:str,convention_db:json,subfolders:str) -> None: #this will create folders if the user is creating his first library
     """
     This function will create the ROMs folder and the to_compress folder by looking at the console dict in order to see which consoles
     might have games that can be compressed and whichs don't
@@ -309,6 +391,7 @@ def create_folders(create_from_scratch:bool,adding:bool,output_dir:Path) -> None
 
     this function doesn't return anything
     """
+    
     if create_from_scratch:
         logging.info("Creating the library from scratch")
         logging.debug("Creating ROMs folder...")
@@ -333,15 +416,7 @@ def create_folders(create_from_scratch:bool,adding:bool,output_dir:Path) -> None
 
         #if convention[0] == 'ES-DE':
         #   convention_manager.create_folders_ESDE(output_dir)
-
-        for console,dir_flag in console_dict.items():
-            logging.info(f"Creating ROMs/{console} subfolder")
-            dest = output_dir / "ROMs" / f"{console}"
-            dest.mkdir(exist_ok=True)
-            if dir_flag[1] == True:
-                logging.info(f"Creating to_compress/{console} folder")
-                dest = output_dir / "to_compress" / f"{console}_to_compress"
-                dest.mkdir(exist_ok=True)
+        create_folder_based_in_convention(convention,output_dir,convention_db)
     elif adding:
         logging.info(f"Changing to the user ROMs directory: {output_dir.absolute()}")
         os.chdir(output_dir)
@@ -516,7 +591,7 @@ def size_name_serial_heuristic(file:Path, size_dict:dict, console_tag_serial:dic
 
             
 
-def resolve_console(file:Path,suffix_size_dict,console_tag_serial:dict) -> str:
+def resolve_console(file:Path,suffix_size_dict:dict,console_tag_serial:dict) -> str:
     """
     Receives a path object of the game and returns to which console that game belongs to
     """
@@ -533,7 +608,7 @@ def resolve_console(file:Path,suffix_size_dict,console_tag_serial:dict) -> str:
         return result
         
 
-def get_destination(console,adding:bool,output_dir:Path,to_compress=False,):
+def get_destination(console,adding:bool,output_dir:Path,convention_db,to_compress=False):
     """Needs doc"""
     if console in ('unknown', None):
         return output_dir / 'unknown'
@@ -545,10 +620,28 @@ def get_destination(console,adding:bool,output_dir:Path,to_compress=False,):
         return output_dir / 'to_compress' / f"{console}_to_compress"
     
     roms_base = output_dir if adding else output_dir / 'ROMs'
-    return roms_base
+    
+    if convention_db:
+        systems = convention_db.get("systems", convention_db)
+        for sys_key, values in systems.items():
+            if str(values.get("ES-DE", "")).lower() == console.lower():
+                
+                variations = [
+                    values.get("ES-DE"), 
+                    values.get("Full name"), 
+                    values.get("Manufacture/System"), 
+                    values.get("RetroArch")
+                ]
+                
+                for variant in variations:
+                    if variant and (roms_base / str(variant)).exists():
+                        final_folder_name = str(variant)
+                        break
+                break
+    return roms_base / final_folder_name
 
 
-def processor(file_types: dict, tempDir: tempfile,suffix_size_dict:dict,console_tag_serial:dict,output_dir:Path,adding:bool):
+def processor(file_types: dict, tempDir: tempfile,suffix_size_dict:dict,console_tag_serial:dict,output_dir:Path,adding:bool,convention_db,subfolders:str):
     """
     This function receives a dictionary for the type of file, a temporary Directory and a dictionary with the file sizes of each extension
     console combination
@@ -565,21 +658,29 @@ def processor(file_types: dict, tempDir: tempfile,suffix_size_dict:dict,console_
 
         for type, files in file_types.items():
             if type == 'to_compress' or type == 'not_to_compress':
-                logging.debug("Moving files...")
+                logging.info("Moving files...")
                 for file in files:
                     console= resolve_console(file,suffix_size_dict,console_tag_serial)
                     if type == 'to_compress':
-                        dest = get_destination(console,adding,output_dir,to_compress=True)
+                        dest = get_destination(console,adding,output_dir,convention_db,to_compress=True)
                         dest.mkdir(parents=True,exist_ok=True)
                         if file.exists():
                             shutil.move(file,dest)
-                            logging.debug(f"Moved {file.name} to {dest.name}")
+                            logging.info(f"Moved {file.name} to {dest.name}")
                     elif type == 'not_to_compress':
-                        dest = get_destination(console,adding,output_dir,to_compress=False)
+                        dest = get_destination(console,adding,output_dir,convention_db,to_compress=False)
                         dest.mkdir(parents=True,exist_ok=True)
-                        if file.exists():
-                            shutil.move(file,dest)
-                            logging.debug(f"Moved {file.name} to {dest.name}")
+                        if subfolders == 'Region':
+                            region = extract_region(file,REGION_MAP)
+                            dest_subfolder = Path(dest) / region
+                            dest_subfolder.mkdir(exist_ok=True)
+                            if file.exists():
+                                shutil.move(file,dest_subfolder)
+                                logging.info(f"Moved {file.name} to {dest_subfolder.absolute()}")
+                        else:
+                            if file.exists():
+                                shutil.move(file,dest)
+                                logging.info(f"Moved {file.name} to {dest}")
             else:
                 continue
                 

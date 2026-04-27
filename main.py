@@ -4,6 +4,7 @@ import threading
 import logging
 from pathlib import Path
 import FreeSimpleGUI as sg
+import json
 
 import rules
 import scanner
@@ -54,7 +55,7 @@ class GUIHandler(logging.Handler):
 
 
 
-def back_end(input_dir:Path,output_dir:Path,keep_extract:bool,keep_compress:bool,from_scratch:bool,adding:bool):
+def back_end(input_dir:Path,output_dir:Path,keep_extract:bool,from_scratch:bool,adding:bool,convention:str,subfolders:str):
     existing_folders = {f.name for f in output_dir.iterdir() if f.is_dir()}
     BASE_DIR = Path(__file__).parent.absolute()
     logging.info("BOOTING ROM ORGANIZER...")
@@ -81,15 +82,19 @@ def back_end(input_dir:Path,output_dir:Path,keep_extract:bool,keep_compress:bool
         extracted_list.clear()
         extractor.get_archive_files(copy_list, tempDir, extracted_list,keep_extract)
         classifier.classify_files(extracted_list, files_type_dict, valid_suffix_dict)
-
+    
+    logging.info("Creating the the name conventions database")
+    with open("Rom_naming_conventions.json","r") as f:
+        db = json.load(f)["systems"]
+    
     os.chdir(output_dir)
     logging.info("Output directory set.")
 
-    processor.create_folders(from_scratch,adding,output_dir)
+    processor.create_folders(from_scratch,adding,output_dir,convention,db,subfolders)
         
-    processor.processor(files_type_dict, tempDir, suffix_size_dict, console_tag_serial_dict,output_dir,adding)
+    processor.processor(files_type_dict, tempDir, suffix_size_dict, console_tag_serial_dict,output_dir,adding,db,subfolders)
 
-    compressor.compressor(keep_compress,adding)
+    compressor.compressor(adding,db,subfolders)
     cleaner.clean_empty(output_dir,adding,existing_folders)
 
     logging.info(">>> COMPLETE <<<")
@@ -133,18 +138,19 @@ while True:
 
     elif events == '-ABORT BUTTON-':
         if thread and thread.is_alive():
-            pass  
+            break
         else:
             break 
 
     elif events == '-START_BUTTON-':
         keep_extract = values['-KEEP_EXTRACT-']
-        keep_compress = values['-KEEP_COMPRESS-']
         input_dir = Path(values['-INPUT_FOLDER-'])
         output_dir = Path(values['-OUTPUT_FOLDER-'])
+        convention = values["-CONVENTION-"]
+        subfolders = values["-SUBFOLDERS-"]
         thread = threading.Thread(
             target=back_end,
-            args=(input_dir, output_dir, keep_extract, keep_compress, from_scratch, adding),
+            args=(input_dir,output_dir,keep_extract,from_scratch,adding,convention,subfolders),
             daemon=True
         )
         thread.start()
@@ -156,8 +162,6 @@ while True:
     if thread and not thread.is_alive():
         window['-ABORT BUTTON-'].update("EXIT")
         thread = None
-
-            # force full exit
 
 
 

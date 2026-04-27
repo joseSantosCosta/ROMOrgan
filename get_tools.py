@@ -88,7 +88,7 @@ def get_missing_tools(missing_tools: list) -> None:
         'UnRAR.exe': {
             'url': "https://www.rarlab.com/rar/unrarw64.exe",
             'archive_name': 'unrar_installer.exe',
-            'file_to_isolate': 'unrar.exe'
+            'file_to_isolate': 'UnRAR.exe'
         }
     }
 
