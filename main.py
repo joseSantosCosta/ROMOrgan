@@ -90,7 +90,7 @@ def back_end(input_dir:Path,output_dir:Path,keep_extract:bool,from_scratch:bool,
     os.chdir(output_dir)
     logging.info("Output directory set.")
 
-    processor.create_folders(from_scratch,adding,output_dir,convention,db,subfolders)
+    processor.create_folders(from_scratch,adding,output_dir,convention,db)
         
     processor.processor(files_type_dict, tempDir, suffix_size_dict, console_tag_serial_dict,output_dir,adding,db,subfolders)
 

@@ -380,7 +380,7 @@ def create_folder_based_in_convention(convention:str,output_dir:Path,db:json):
 
                 
 
-def create_folders(create_from_scratch:bool,adding:bool,output_dir:Path,convention:str,convention_db:json,subfolders:str) -> None: #this will create folders if the user is creating his first library
+def create_folders(create_from_scratch:bool,adding:bool,output_dir:Path,convention:str,convention_db:json) -> None: #this will create folders if the user is creating his first library
     """
     This function will create the ROMs folder and the to_compress folder by looking at the console dict in order to see which consoles
     might have games that can be compressed and whichs don't
@@ -673,6 +673,13 @@ def processor(file_types: dict, tempDir: tempfile,suffix_size_dict:dict,console_
                         if subfolders == 'Region':
                             region = extract_region(file,REGION_MAP)
                             dest_subfolder = Path(dest) / region
+                            dest_subfolder.mkdir(exist_ok=True)
+                            if file.exists():
+                                shutil.move(file,dest_subfolder)
+                                logging.info(f"Moved {file.name} to {dest_subfolder.absolute()}")
+                        elif subfolders == 'Alphabetical':
+                            first_letter = file.name
+                            dest_subfolder = Path(dest) / first_letter
                             dest_subfolder.mkdir(exist_ok=True)
                             if file.exists():
                                 shutil.move(file,dest_subfolder)

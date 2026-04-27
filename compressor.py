@@ -186,7 +186,13 @@ def compressor(adding: bool, convention_db: dict,subfolders:str):
                     logging.info(f"Standardized console folder name detected as: {final_folder_name}")
                     logging.info(f"Moving to {dest_dir.absolute()}")
                     shutil.move(output_file, dest_dir)
-                
+                elif subfolders == 'Alphabetical':
+                    first_letter = game.name[0]
+                    dest_dir = roms_base_dir / final_folder_name / first_letter
+                    logging.info(f"Creating {dest_dir.absolute()} to put {output_file}")
+                    dest_dir.mkdir(parents=True,exist_ok=True)
+                    logging.info(f"Moving to {dest_dir.absolute()}")
+                    shutil.move(output_file,dest_dir)                
                 else:
                     dest_dir = roms_base_dir / final_folder_name
                     dest_dir.mkdir(parents=True, exist_ok=True)
